@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 
 public class Question extends Application {
   static int count;
+  static int correct;
   public Question() {
     count++;
   }
@@ -56,10 +57,17 @@ choice4.setOnAction(e -> button.setDisable(false) );
 
 button.setOnAction(e -> 
 {
+  if(choice1.isSelected() ) {
+    correct++;
+  }
   if(count <5) {
 Question next = new Question();
 next.start(primaryStage);
   }
+  else {
+    Results result = new Results(count,correct);
+    result.start(primaryStage);
+  };
 });
 
 //create image 
