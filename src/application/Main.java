@@ -74,16 +74,27 @@ public class Main extends Application {
       dropdownTopics.getItems().addAll("Topic 1", "Topic 2", "Topic 3", "Topic 4", "Topic 5");
 
 
+      btnStartQuiz.setOnAction(e -> {
+        questionScene.start(primaryStage);
+       // pass: txtNumQuestions.getText() into method of questionScene to pass the number of questions
+      });
+      btnAddTopic.setOnAction(e -> {
+        
+        listTopics.getItems().add(dropdownTopics.getValue());
+      });
+      btnRemoveTopic.setOnAction(e -> {
+        listTopics.getItems().remove(dropdownTopics.getValue());
+      });
       btnStartQuiz.setOnAction(e -> questionScene.start(primaryStage));
-      btnAddTopic.setOnAction(e -> listTopics.setItems(topics));
-      btnRemoveTopic.setOnAction(e -> questionScene.start(primaryStage));
-
+      
+      
+      
       root.setTop(lblWelcome);
       root.setBottom(btnStartQuiz);
       root.setLeft(gridpane);
       root.setRight(listTopics);
 
-
+      
 
     } catch (Exception e) {
       e.printStackTrace();

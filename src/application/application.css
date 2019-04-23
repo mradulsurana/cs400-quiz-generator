@@ -1,7 +1,7 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
 .root{
-    -fx-font-size: 20pt;
+    -fx-font-size: 18pt;
     -fx-font-family: "Arial";
     -fx-background: rgb(75, 205, 205);
     -fx-padding: 20px;
