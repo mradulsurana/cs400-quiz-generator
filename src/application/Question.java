@@ -57,7 +57,7 @@ choice4.setOnAction(e -> button.setDisable(false) );
 button.setOnAction(e -> 
 {
   if(count <5) {
-MCTest next = new MCTest();
+Question next = new Question();
 next.start(primaryStage);
   }
 });
