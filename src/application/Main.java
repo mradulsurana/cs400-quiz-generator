@@ -41,10 +41,10 @@ public class Main extends Application {
       createMainScene(root, primaryStage, topics);
 
     } catch (Exception e) {
-      // catch any unkown exceptions
+      // catch any unknown exceptions
     }
   }
-  
+
   public void subStart(Stage primaryStage) {
     primaryStage.show();
   }
@@ -52,7 +52,7 @@ public class Main extends Application {
   private void createMainScene(BorderPane root, Stage primaryStage, ObservableList<String> topics) {
 
     primaryStage.setTitle("Quiz Generator");
-    
+
     Scene scene = new Scene(root, 1400, 864); // set size of screen
     primaryStage.setMinWidth(1400);
     primaryStage.setMinHeight(864);
@@ -67,7 +67,7 @@ public class Main extends Application {
     HBox hbox = new HBox(10);
     VBox vboxRight = new VBox(10);
     vboxRight.setId("topicsVBox"); // set id to change CSS of VBox
-    
+
     // create labels
     Label lblWelcome = new Label("Welcome to Quiz Generator");
     lblWelcome.setId("welcome");
@@ -81,6 +81,7 @@ public class Main extends Application {
     Button btnLoad = new Button("Load");
     Button btnAddTopic = new Button("Add Topic");
     Button btnRemoveTopic = new Button("Remove Topic");
+    Button btnAddQuestions = new Button("Add Questions");
 
     // create textfield
     TextField txtNumQuestions = new TextField();
@@ -165,7 +166,17 @@ public class Main extends Application {
       try {
         loadFileScene.start(primaryStage);
       } catch (Exception e1) {
-        
+
+      }
+    });
+
+    // display load JSON screen
+    btnAddQuestions.setOnAction(e -> {
+      SceneAddQuestion addQuestionScene = new SceneAddQuestion();
+      try {
+        addQuestionScene.start(primaryStage);
+      } catch (Exception e1) {
+
       }
     });
 
@@ -178,12 +189,13 @@ public class Main extends Application {
     // add elements to HBox
     hbox.getChildren().add(btnStartQuiz);
     hbox.getChildren().add(btnLoad);
-    
+    hbox.getChildren().add(btnAddQuestions);
+
     // add elements to topics VBox
     vboxRight.getChildren().add(listTopicsLabel);
     vboxRight.getChildren().add(listTopics);
-    listTopics.setMinHeight(600); //  set minimum height of topics list
-    
+    listTopics.setMinHeight(600); // set minimum height of topics list
+
   }
 
   public static void main(String[] args) {
