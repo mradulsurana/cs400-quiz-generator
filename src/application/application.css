@@ -28,6 +28,10 @@
 	-fx-min-width: 400;
 }
 
+#popup > .label{
+	-fx-text-fill: #000000;
+}
+
 #topicsVBox {
 	-fx-alignment: center;
 }
