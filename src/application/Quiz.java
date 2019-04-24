@@ -136,11 +136,12 @@ public void start(Stage primaryStage) {
   root.setAlignment(i1, Pos.CENTER);
   root.setMargin(layout, new Insets(50));
   root.setMargin(i1, new Insets(50));
-  Scene scene1= new Scene(root, 700, 700);
+  Scene scene1= new Scene(root, 1400, 864);
+  scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
   primaryStage.setScene(scene1);
         
   primaryStage.show();
-}
+  }
 
   
 

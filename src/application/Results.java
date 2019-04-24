@@ -53,7 +53,8 @@ public class Results extends Application{
     root.setBottom(h);
     root.setMargin(v, new Insets(100));
     root.setMargin(h, new Insets(100));
-    Scene scene2 = new Scene(root,700,700);
+    Scene scene2 = new Scene(root,1400,864);
+    scene2.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
     primaryStage.setScene(scene2);
     primaryStage.show();
   }
