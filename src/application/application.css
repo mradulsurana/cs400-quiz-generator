@@ -1,10 +1,39 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
 .root{
-    -fx-font-size: 20pt;
-    -fx-font-family: "Arial";
-    -fx-background: rgb(75, 205, 205);
+    -fx-font-size: 18pt;
+    -fx-font-family: "Verdana";
+    -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #1fc8db, #2cb5e8);
     -fx-padding: 20px;
 
 }
 
+#welcome {
+	-fx-padding: 0 0 50 0;
+	-fx-font-size: 25pt;
+	-fx-font-weight: bold;
+}
+
+#gridpane {
+	-fx-alignment: center;
+	-fx-vgap: 80;
+    
+}
+
+#popup {
+	-fx-background-color: #f5f5f5;
+	-fx-border-width: 3;
+	-fx-border-style: solid;
+	-fx-min-height: 120;
+	-fx-min-width: 400;
+}
+
+#topicsVBox {
+	-fx-alignment: center;
+}
+
+.label {
+    -fx-text-fill: #FFFFFF;
+    
+    }
+    
