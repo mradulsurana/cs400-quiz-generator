@@ -76,7 +76,6 @@ public class Quiz extends Application {
 
 @Override
 public void start(Stage primaryStage) {
-  this.setNumQuestions(10);
   this.setToggle();
   
   BorderPane root = new BorderPane();
