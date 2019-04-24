@@ -127,7 +127,7 @@ public class Main extends Application {
     // add topic to the list of topics for the quiz
     btnAddTopic.setOnAction(e -> {
       String topic = dropdownTopics.getValue(); // get value of topic chosen in drop down
-      
+
       // check if the topic is actually chosen and it is not already contained in the list
       if (topic != null && !listTopics.getItems().contains(topic))
         listTopics.getItems().add(topic); // add topic to list
@@ -141,10 +141,21 @@ public class Main extends Application {
         popup.show();
       }
     });
-    
+
     // remove a topic if the user selects it from the drop down
     btnRemoveTopic.setOnAction(e -> {
       listTopics.getItems().remove(dropdownTopics.getValue());
+    });
+
+    // display load JSON screen
+    btnLoad.setOnAction(e -> {
+      SceneLoadFile loadFileScene = new SceneLoadFile();
+      try {
+        loadFileScene.start(primaryStage);
+      } catch (Exception e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+      }
     });
 
     // set location of elements on the page

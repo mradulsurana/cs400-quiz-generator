@@ -3,13 +3,14 @@
 .root{
     -fx-font-size: 18pt;
     -fx-font-family: "Arial";
-    -fx-background: rgb(75, 205, 205);
+    -fx-background: #C7FFFF;
     -fx-padding: 20px;
 
 }
 
 #welcome {
 	-fx-padding: 0 0 50 0;
+	-fx-font-size: 25pt;
 }
 
 #gridpane {
