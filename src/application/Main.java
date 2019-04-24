@@ -25,6 +25,7 @@ import javafx.stage.Popup;
 public class Main extends Application {
 
   ObservableList<String> topics = FXCollections.observableArrayList();
+  Scene scene;
 
   @Override
   public void start(Stage primaryStage) {
@@ -46,14 +47,16 @@ public class Main extends Application {
   }
 
   public void subStart(Stage primaryStage) {
+    primaryStage.setScene(scene);
     primaryStage.show();
+    
   }
 
   private void createMainScene(BorderPane root, Stage primaryStage, ObservableList<String> topics) {
 
     primaryStage.setTitle("Quiz Generator");
 
-    Scene scene = new Scene(root, 1400, 864); // set size of screen
+    scene = new Scene(root, 1400, 864); // set size of screen
     primaryStage.setMinWidth(1400);
     primaryStage.setMinHeight(864);
     // get CSS
@@ -119,8 +122,9 @@ public class Main extends Application {
       try {
         int numQuestions = Integer.parseInt(txtNumQuestions.getText());
         if (!txtNumQuestions.getText().equals("") && !listTopics.getItems().isEmpty()) {
-          Question questionScene = new Question();
-          questionScene.start(primaryStage);
+          Quiz quizScene = new Quiz();
+          quizScene.setNumQuestions(numQuestions);
+          quizScene.start(primaryStage);
         } else { // prompt user to fill out fields
           popup.setLabel("Please enter the number of questions and choose at least one topic");
           popup.show();
