@@ -49,7 +49,7 @@ public class Main extends Application {
   public void subStart(Stage primaryStage) {
     primaryStage.setScene(scene);
     primaryStage.show();
-    
+
   }
 
   private void createMainScene(BorderPane root, Stage primaryStage, ObservableList<String> topics) {

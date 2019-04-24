@@ -48,6 +48,8 @@ public class CustomPopup {
     vbox.setAlignment(Pos.CENTER);
     VBox.setMargin(btnClose, new Insets(20));
     
+    popupLabel.setId("popupLabel");
+    
     
   }
 }

@@ -95,6 +95,7 @@ public class SceneAddQuestion extends Application {
 		Scene scene1= new Scene(root, 700, 700);
 		primaryStage.setScene(scene1);
 		        
+		scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		primaryStage.show();
 		
 		
