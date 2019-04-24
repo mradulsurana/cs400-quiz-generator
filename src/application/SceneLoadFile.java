@@ -54,7 +54,7 @@ public class SceneLoadFile extends Application{
 		btnLoad.setOnAction(e -> {
 			try {
 				parseQuestions(getFileName.getText());
-				mainScene.subStart();	
+				mainScene.subStart(primaryStage);	
 			} catch (Exception ex){
 				CustomPopup pop = new CustomPopup(primaryStage);
 				pop.setLabel("Oops. Something went wrong.\nMake sure the file path name is correct and try again.");
@@ -66,7 +66,7 @@ public class SceneLoadFile extends Application{
 		
 		Button btnBack = new Button("Back");
 		btnBack.setOnAction(e -> {
-			mainScene.subStart();
+			mainScene.subStart(primaryStage);
 			//TODO
 		});
 		

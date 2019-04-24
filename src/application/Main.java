@@ -44,10 +44,18 @@ public class Main extends Application {
       // catch any unkown exceptions
     }
   }
+  
+  public void subStart(Stage primaryStage) {
+    primaryStage.show();
+  }
 
   private void createMainScene(BorderPane root, Stage primaryStage, ObservableList<String> topics) {
 
+    primaryStage.setTitle("Quiz Generator");
+    
     Scene scene = new Scene(root, 1400, 864); // set size of screen
+    primaryStage.setMinWidth(1400);
+    primaryStage.setMinHeight(864);
     // get CSS
     scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
     primaryStage.setScene(scene); // set primary state and show stage
@@ -55,14 +63,18 @@ public class Main extends Application {
 
     // create layout boxes to hold other elements
     GridPane gridpane = new GridPane();
-    gridpane.setHgap(10); // set padding between hbox elements
+    gridpane.setHgap(10); // set padding between HBox elements
     HBox hbox = new HBox(10);
-
+    VBox vboxRight = new VBox(10);
+    vboxRight.setId("topicsVBox"); // set id to change CSS of VBox
+    
     // create labels
     Label lblWelcome = new Label("Welcome to Quiz Generator");
     lblWelcome.setId("welcome");
     Label lblChooseTopic = new Label("Choose Topic");
     Label lblNumQuestions = new Label("Choose Number of Questions");
+    Label listTopicsLabel = new Label("Selected Topics");
+
 
     // create buttons
     Button btnStartQuiz = new Button("Start Quiz");
@@ -149,12 +161,11 @@ public class Main extends Application {
 
     // display load JSON screen
     btnLoad.setOnAction(e -> {
-      SceneLoadFile loadFileScene = new SceneLoadFile();
+      SceneLoadFile loadFileScene = new SceneLoadFile(this);
       try {
         loadFileScene.start(primaryStage);
       } catch (Exception e1) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
+        
       }
     });
 
@@ -162,10 +173,17 @@ public class Main extends Application {
     root.setTop(lblWelcome);
     root.setBottom(hbox);
     root.setLeft(gridpane);
-    root.setRight(listTopics);
+    root.setRight(vboxRight);
 
+    // add elements to HBox
     hbox.getChildren().add(btnStartQuiz);
     hbox.getChildren().add(btnLoad);
+    
+    // add elements to topics VBox
+    vboxRight.getChildren().add(listTopicsLabel);
+    vboxRight.getChildren().add(listTopics);
+    listTopics.setMinHeight(600); //  set minimum height of topics list
+    
   }
 
   public static void main(String[] args) {
