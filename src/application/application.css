@@ -3,7 +3,7 @@
 .root{
     -fx-font-size: 18pt;
     -fx-font-family: "Verdana";
-    -fx-background-color: linear-gradient(217deg, rgba(41,181,232,.8), rgba(41,181,232,0) 70.71%), linear-gradient(127deg, rgba(125,220,255,.5), rgba(125,220,255,0) 70.71%), linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
+    -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #1fc8db, #2cb5e8);
     -fx-padding: 20px;
 
 }
