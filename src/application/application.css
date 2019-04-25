@@ -30,6 +30,11 @@
 
 #popup > .label{
 	-fx-text-fill: #000000;
+	-fx-background-color: transparent;
+}
+
+.popup {
+	-fx-padding: 0px;
 }
 
 #VBox {

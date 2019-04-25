@@ -36,6 +36,7 @@ public class CustomPopup {
     Button btnClose = new Button("Ok");
     popupLabel.setMinWidth(120);
     popupLabel.setMinHeight(200);
+    
     // popup.getContent().add(btnClose);
     popup.getContent().add(vbox);
     vbox.getChildren().add(popupLabel);
