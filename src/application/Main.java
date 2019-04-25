@@ -50,6 +50,9 @@ public class Main extends Application {
   private Label lblWelcome = new Label("Welcome to Quiz Generator");
   private Label listTopicsLabel = new Label("Selected Topics");
 
+  /**
+   * This is the main start method. It creates the GUI. 
+   */
   @Override
   public void start(Stage primaryStage) {
 
@@ -160,7 +163,7 @@ public class Main extends Application {
   public void setRight(BorderPane root) {
     
     VBox vboxRight = new VBox(10); // create new VBox to store elements horizontally
-    vboxRight.setId("topicsVBox"); // set id to change CSS of VBox
+    vboxRight.setId("VBox"); // set id to change CSS of VBox
     root.setRight(vboxRight); // add HBox to BorderPane left
 
     // add elements to topics VBox
