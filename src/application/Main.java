@@ -193,10 +193,17 @@ public class Main extends Application {
       try {
         int numQuestions = Integer.parseInt(txtNumQuestions.getText());
         if (!txtNumQuestions.getText().equals("") && !listTopics.getItems().isEmpty() && (numQuestions > 0)) {
+          
+          // clear fields so the next time the user creates a quiz the fields are reset
+          txtNumQuestions.clear();
+          listTopics.getItems().clear();
+          
+          // create and start Quiz scene
           Quiz quizScene = new Quiz(this);
           quizScene.clear();
           quizScene.setNumQuestions(numQuestions);
           quizScene.start(primaryStage);
+          
         } else { // prompt user to fill out fields
           popup.setLabel("Please enter a positive number of questions and choose at least one topic");
           popup.show(primaryStage);
