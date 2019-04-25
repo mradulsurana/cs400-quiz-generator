@@ -192,13 +192,13 @@ public class Main extends Application {
 
       try {
         int numQuestions = Integer.parseInt(txtNumQuestions.getText());
-        if (!txtNumQuestions.getText().equals("") && !listTopics.getItems().isEmpty()) {
+        if (!txtNumQuestions.getText().equals("") && !listTopics.getItems().isEmpty() && (numQuestions > 0)) {
           Quiz quizScene = new Quiz(this);
           quizScene.clear();
           quizScene.setNumQuestions(numQuestions);
           quizScene.start(primaryStage);
         } else { // prompt user to fill out fields
-          popup.setLabel("Please enter the number of questions and choose at least one topic");
+          popup.setLabel("Please enter a positive number of questions and choose at least one topic");
           popup.show(primaryStage);
         }
 
