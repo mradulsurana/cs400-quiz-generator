@@ -52,6 +52,7 @@ public class SceneAddQuestion extends Application {
 		choiceThree = new TextField();
 		choiceFour = new TextField();
 		choiceFive = new TextField();
+		choiceOne.setPrefWidth(800);
 		
 		textField.setPromptText("Enter Question Here");
 		imageFile.setPromptText("Enter Image File Here");
@@ -74,39 +75,43 @@ public class SceneAddQuestion extends Application {
 		
 		ComboBox topics = new ComboBox();
 		
-		VBox textInputs = new VBox(4);
-		textInputs.getChildren().addAll(text, topic, image, choice);
+
 		GridPane grid = new GridPane();
 		grid.add(text, 0, 0, 1, 1);
 		grid.add(topic, 0, 1, 1, 1);
 		grid.add(image, 0, 2, 1, 1);
-		grid.add(choice, 0, 4, 1, 1);
-		grid.add(new Label("  "), 0, 3, 1, 1);
-		grid.add(choiceOne, 0, 5, 1, 1);
-		grid.add(choiceTwo, 0, 6, 1, 1);
-		grid.add(choiceThree, 0, 7, 1, 1);
-		grid.add(choiceFour, 0, 8, 1, 1);
-		grid.add(choiceFive, 0,  9, 1, 1);
-		
 		grid.add(textField, 1, 0, 1, 1);
 		grid.add(topics, 1, 1, 1, 1);
 		grid.add(imageFile, 1, 2, 1, 1);
-		grid.add(correct, 1, 4, 1, 1);
-		grid.add(new Label("  "), 1, 3, 1, 1);
-		grid.add(choice1, 1, 5, 1, 1);
-		grid.add(choice2, 1, 6, 1, 1);
-		grid.add(choice3, 1, 7, 1, 1);
-		grid.add(choice4, 1, 8, 1, 1);
-		grid.add(choice5, 1, 9, 1, 1);
+		
+		GridPane grid2 = new GridPane();
+
+		grid2.add(choice, 0, 1, 1, 1);
+		grid2.add(choiceOne, 0, 2, 1, 1);
+		grid2.add(choiceTwo, 0, 3, 1, 1);
+		grid2.add(choiceThree, 0, 4, 1, 1);
+		grid2.add(choiceFour, 0, 5, 1, 1);
+		grid2.add(choiceFive, 0,  6, 1, 1);
+
+		grid2.add(correct, 1, 1, 1, 1);
+		grid2.add(choice1, 1, 2, 1, 1);
+		grid2.add(choice2, 1, 3, 1, 1);
+		grid2.add(choice3, 1, 4, 1, 1);
+		grid2.add(choice4, 1, 5, 1, 1);
+		grid2.add(choice5, 1, 6, 1, 1);
 		
 		HBox bottomButtons = new HBox(2);
 		bottomButtons.getChildren().addAll(back, add);
 		bottomButtons.setAlignment(Pos.CENTER);
 		bottomButtons.setSpacing(200);
 		grid.setVgap(30);
-		grid.setHgap(100);
+		grid.setHgap(200);
 		grid.setAlignment(Pos.CENTER);
-		root.setCenter(grid);
+		grid2.setVgap(30);
+		grid2.setHgap(200);
+		grid2.setAlignment(Pos.CENTER);
+		root.setCenter(grid2);
+		root.setTop(grid);
 		root.setBottom(bottomButtons);
 		
 		
@@ -115,7 +120,7 @@ public class SceneAddQuestion extends Application {
 		back.setOnAction(e ->  mainClass.subStart(primaryStage));
 		
 		
-		Scene scene1= new Scene(root, 700, 700);
+		Scene scene1= new Scene(root, 1400, 864);
 		primaryStage.setScene(scene1);
 		        
 		scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
