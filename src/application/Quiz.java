@@ -26,9 +26,10 @@ public class Quiz extends Application {
   private ArrayList<RadioButton> correctToggles;
   private static int count;
   private static int correct;
-  private static int max = 5;
+  private static int max;
+  private static Main sceneMain;
   
-  public Quiz() {
+  public Quiz(Main sceneMain) {
     if(count == 0) { 
     this.questions = new ArrayList<Question>();
     Question testQuestion = new Question("What is the answer to the question?"); 
@@ -37,8 +38,15 @@ public class Quiz extends Application {
     testQuestion.incorrectAns.add("C");
     testQuestion.incorrectAns.add("D");
     this.questions.add(testQuestion);
+    this.sceneMain = sceneMain;
     }
     count++;
+  }
+  
+  public void clear() {
+    this.count = 0;
+    this.correct = 0;
+    
   }
   
   public void setNumQuestions(int num) {
@@ -108,11 +116,11 @@ public void start(Stage primaryStage) {
       }
     }
     if(count < max) {
-      Quiz next = new Quiz();
+      Quiz next = new Quiz(sceneMain);
       next.start(primaryStage);
     }
     else {
-      Results result = new Results(count,correct);
+      Results result = new Results(sceneMain,count,correct);
       result.start(primaryStage);
     };
   });
@@ -136,11 +144,12 @@ public void start(Stage primaryStage) {
   root.setAlignment(i1, Pos.CENTER);
   root.setMargin(layout, new Insets(50));
   root.setMargin(i1, new Insets(50));
-  Scene scene1= new Scene(root, 700, 700);
+  Scene scene1= new Scene(root, 1400, 864);
+  scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
   primaryStage.setScene(scene1);
         
   primaryStage.show();
-}
+  }
 
   
 
