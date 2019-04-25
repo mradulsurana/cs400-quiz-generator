@@ -2,6 +2,7 @@ package application;
 
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -11,14 +12,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class SceneAddQuestion extends Application {
+	Main mainClass;
 
-	
-	public SceneAddQuestion() {
-		
+
+	public SceneAddQuestion(Main main) {
+		mainClass = main;
 	}
 	
 	@Override
@@ -55,6 +58,7 @@ public class SceneAddQuestion extends Application {
 		choiceFour = new TextField("Choice Four");
 		
 		Button add = new Button("Add");
+		Button back = new Button("Back");
 		
 		add.setDisable(true);
 
@@ -71,8 +75,8 @@ public class SceneAddQuestion extends Application {
 		grid.add(text, 0, 0, 1, 1);
 		grid.add(topic, 0, 1, 1, 1);
 		grid.add(image, 0, 2, 1, 1);
-		grid.add(choice, 0, 3, 1, 1);
-		grid.add(new Label("  "), 0, 4, 1, 1);
+		grid.add(choice, 0, 4, 1, 1);
+		grid.add(new Label("  "), 0, 3, 1, 1);
 		grid.add(choiceOne, 0, 5, 1, 1);
 		grid.add(choiceTwo, 0, 6, 1, 1);
 		grid.add(choiceThree, 0, 7, 1, 1);
@@ -81,22 +85,36 @@ public class SceneAddQuestion extends Application {
 		grid.add(textField, 1, 0, 1, 1);
 		grid.add(topics, 1, 1, 1, 1);
 		grid.add(imageFile, 1, 2, 1, 1);
-		grid.add(correct, 1, 3, 1, 1);
-		grid.add(new Label("  "), 1, 4, 1, 1);
+		grid.add(correct, 1, 4, 1, 1);
+		grid.add(new Label("  "), 1, 3, 1, 1);
 		grid.add(choice1, 1, 5, 1, 1);
 		grid.add(choice2, 1, 6, 1, 1);
 		grid.add(choice3, 1, 7, 1, 1);
 		grid.add(choice4, 1, 8, 1, 1);
 		
-		
+		HBox bottomButtons = new HBox(2);
+		bottomButtons.getChildren().addAll(back, add);
+		bottomButtons.setAlignment(Pos.CENTER);
+		bottomButtons.setSpacing(200);
+		grid.setVgap(30);
+		grid.setHgap(100);
+		grid.setAlignment(Pos.CENTER);
 		root.setCenter(grid);
-		root.setBottom(add);
+		root.setBottom(bottomButtons);
+		
+		
+		
+		//add.setOnAction(e ->  );
+		back.setOnAction(e ->  mainClass.subStart(primaryStage));
+		
 		
 		Scene scene1= new Scene(root, 700, 700);
 		primaryStage.setScene(scene1);
 		        
 		scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		primaryStage.show();
+		
+		
 		
 		
 		
