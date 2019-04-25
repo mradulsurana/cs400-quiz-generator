@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 
 public class SceneAddQuestion extends Application {
 	Main mainClass;
+	Scene scene1;
 
 	// needs to take in parameter for topic list
 	public SceneAddQuestion(Main main) {
@@ -116,11 +117,15 @@ public class SceneAddQuestion extends Application {
 		
 		
 		
-		//add.setOnAction(e ->  );
+		add.setOnAction(e -> {
+			if (!choice1.isSelected() && !choice2.isSelected() && !choice3.isSelected() && 
+					!choice4.isSelected() && !choice5.isSelected())
+				this.subStart(primaryStage);
+		});
 		back.setOnAction(e ->  mainClass.subStart(primaryStage));
 		
 		
-		Scene scene1= new Scene(root, 1400, 864);
+		scene1= new Scene(root, 1400, 864);
 		primaryStage.setScene(scene1);
 		        
 		scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -135,6 +140,12 @@ public class SceneAddQuestion extends Application {
 		
 		
 	}
+	
+	  public void subStart(Stage primaryStage) {
+		    primaryStage.setScene(scene1);
+		    primaryStage.show();
+
+		  }
 	
 	
 }
