@@ -27,6 +27,29 @@ public class Main extends Application {
   ObservableList<String> topics = FXCollections.observableArrayList();
   Scene scene;
 
+  // create buttons
+  private Button btnStartQuiz = new Button("Start Quiz");
+  private Button btnLoad = new Button("Load");
+  private Button btnAddQuestions = new Button("Add Questions");
+  private Button btnAddTopic = new Button("Add Topic");
+  private Button btnRemoveTopic = new Button("Remove Topic");
+
+  // create TextField
+  private TextField txtNumQuestions = new TextField();
+
+  // create ListView to hold added topics
+  private ListView<String> listTopics = new ListView<String>();
+
+  // create drop down for available topics
+  private ComboBox<String> dropdownTopics = new ComboBox<String>(topics);
+
+  // create a custom popup that has an "ok" button to close the popup
+  private CustomPopup popup = new CustomPopup();
+
+  // create labels
+  private Label lblWelcome = new Label("Welcome to Quiz Generator");
+  private Label listTopicsLabel = new Label("Selected Topics");
+
   @Override
   public void start(Stage primaryStage) {
 
@@ -54,55 +77,76 @@ public class Main extends Application {
 
   private void createMainScene(BorderPane root, Stage primaryStage, ObservableList<String> topics) {
 
-    primaryStage.setTitle("Quiz Generator");
+    primaryStage.setTitle("Quiz Generator"); // set Title of Application
 
     scene = new Scene(root, 1400, 864); // set size of screen
+
+    // set minimum screen size, so user cannot size below the requirements before
     primaryStage.setMinWidth(1400);
     primaryStage.setMinHeight(864);
+
     // get CSS
     scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
     primaryStage.setScene(scene); // set primary state and show stage
     primaryStage.show();
 
-    // create layout boxes to hold other elements
+
+    // set all elements of BorderPane layout
+    setTop(root);
+    setLeft(root);
+    setRight(root);
+    setBottom(root);
+    handleEvents(primaryStage);
+
+
+
+    /*
+     * // set the alignment of elements on the page BorderPane.setAlignment(gridpane,
+     * Pos.CENTER_LEFT); BorderPane.setAlignment(lblWelcome, Pos.CENTER);
+     * BorderPane.setAlignment(hbox, Pos.BOTTOM_CENTER);
+     */
+
+
+
+
+
+    
+
+
+
+  }
+
+  public static void main(String[] args) {
+    launch(args);
+  }
+
+  public void setTop(BorderPane root) {
+    // set location of elements on the page
+    root.setTop(lblWelcome);
+    lblWelcome.setId("welcome");
+  }
+
+  public void setLeft(BorderPane root) {
+
+    // create layout box to hold other elements
     GridPane gridpane = new GridPane();
     gridpane.setHgap(10); // set padding between HBox elements
-    HBox hbox = new HBox(10);
-    VBox vboxRight = new VBox(10);
-    vboxRight.setId("topicsVBox"); // set id to change CSS of VBox
+    gridpane.setId("gridpane"); // give gridpane an id to apply CSS
+
+    root.setLeft(gridpane); // add gridpane to borderpane
 
     // create labels
-    Label lblWelcome = new Label("Welcome to Quiz Generator");
-    lblWelcome.setId("welcome");
     Label lblChooseTopic = new Label("Choose Topic");
     Label lblNumQuestions = new Label("Choose Number of Questions");
-    Label listTopicsLabel = new Label("Selected Topics");
 
 
-    // create buttons
-    Button btnStartQuiz = new Button("Start Quiz");
-    Button btnLoad = new Button("Load");
-    Button btnAddTopic = new Button("Add Topic");
-    Button btnRemoveTopic = new Button("Remove Topic");
-    Button btnAddQuestions = new Button("Add Questions");
-
-    // create textfield
-    TextField txtNumQuestions = new TextField();
-    txtNumQuestions.setPrefWidth(100); // set width of textfield
-
-    // create drop down for available topics and listview to hold added topics
-    ComboBox<String> dropdownTopics = new ComboBox<String>(topics);
     // alternative way to add sample topics to drop down
     // dropdownTopics.getItems().addAll(topics);
-    ListView<String> listTopics = new ListView<String>();
     dropdownTopics.setPrefWidth(300); // set width of dropdown list of topics
 
-    // set the alignment of elements on the page
-    BorderPane.setAlignment(lblWelcome, Pos.CENTER);
-    BorderPane.setAlignment(gridpane, Pos.CENTER_LEFT);
-    BorderPane.setAlignment(hbox, Pos.BOTTOM_CENTER);
 
-    gridpane.setId("gridpane"); // give gridpane an id to apply CSS
+
+    txtNumQuestions.setPrefWidth(100); // set width of textfield
 
     // place elements in gridpane
     gridpane.add(lblChooseTopic, 0, 0);
@@ -111,10 +155,34 @@ public class Main extends Application {
     gridpane.add(txtNumQuestions, 1, 1);
     gridpane.add(btnAddTopic, 2, 0);
     gridpane.add(btnRemoveTopic, 3, 0);
+  }
 
-    // create a custom popup that has an "ok" button to close the popup
-    CustomPopup popup = new CustomPopup(primaryStage);
+  public void setRight(BorderPane root) {
+    
+    VBox vboxRight = new VBox(10); // create new VBox to store elements horizontally
+    vboxRight.setId("topicsVBox"); // set id to change CSS of VBox
+    root.setRight(vboxRight); // add HBox to BorderPane left
 
+    // add elements to topics VBox
+    vboxRight.getChildren().add(listTopicsLabel);
+    vboxRight.getChildren().add(listTopics);
+    listTopics.setMinHeight(600); // set minimum height of topics list
+  
+  }
+
+  public void setBottom(BorderPane root) {
+
+    
+    HBox hbox = new HBox(10); // create new HBox to store elements horizontally
+    root.setBottom(hbox); // add HBox to BorderPane bottom
+
+    // add elements to HBox
+    hbox.getChildren().add(btnStartQuiz);
+    hbox.getChildren().add(btnLoad);
+    hbox.getChildren().add(btnAddQuestions);
+  }
+
+  public void handleEvents(Stage primaryStage) {
     // event handler to start quiz
     btnStartQuiz.setOnAction(e -> {
       // checks if the user typed in the number of questions and if the user selected topics
@@ -122,18 +190,19 @@ public class Main extends Application {
       try {
         int numQuestions = Integer.parseInt(txtNumQuestions.getText());
         if (!txtNumQuestions.getText().equals("") && !listTopics.getItems().isEmpty()) {
-          Quiz quizScene = new Quiz();
+          Quiz quizScene = new Quiz(this);
+          quizScene.clear();
           quizScene.setNumQuestions(numQuestions);
           quizScene.start(primaryStage);
         } else { // prompt user to fill out fields
           popup.setLabel("Please enter the number of questions and choose at least one topic");
-          popup.show();
+          popup.show(primaryStage);
         }
 
       } catch (NumberFormatException f) {
         // prompt user to fill out fields correctly
         popup.setLabel("Please enter the number of questions");
-        popup.show();
+        popup.show(primaryStage);
       }
 
 
@@ -151,11 +220,11 @@ public class Main extends Application {
       else if (topic != null && !dropdownTopics.getValue().equals("")) {
         // show error message if the topic is already in the list
         popup.setLabel("You have already added this topic to the list");
-        popup.show();
+        popup.show(primaryStage);
       } else if (topic == null) {
         // show error message if no topic is selected from drop down
         popup.setLabel("Please select a topic to add it to the list");
-        popup.show();
+        popup.show(primaryStage);
       }
     });
 
@@ -176,33 +245,13 @@ public class Main extends Application {
 
     // display load JSON screen
     btnAddQuestions.setOnAction(e -> {
-      SceneAddQuestion addQuestionScene = new SceneAddQuestion();
+      SceneAddQuestion addQuestionScene = new SceneAddQuestion(this);
       try {
         addQuestionScene.start(primaryStage);
       } catch (Exception e1) {
 
       }
     });
-
-    // set location of elements on the page
-    root.setTop(lblWelcome);
-    root.setBottom(hbox);
-    root.setLeft(gridpane);
-    root.setRight(vboxRight);
-
-    // add elements to HBox
-    hbox.getChildren().add(btnStartQuiz);
-    hbox.getChildren().add(btnLoad);
-    hbox.getChildren().add(btnAddQuestions);
-
-    // add elements to topics VBox
-    vboxRight.getChildren().add(listTopicsLabel);
-    vboxRight.getChildren().add(listTopics);
-    listTopics.setMinHeight(600); // set minimum height of topics list
-
   }
 
-  public static void main(String[] args) {
-    launch(args);
-  }
 }
