@@ -11,10 +11,8 @@ import javafx.stage.Stage;
 public class CustomPopup {
   private Popup popup = new Popup();
   private Label popupLabel = new Label();
-  private Stage primaryStage = new Stage();
   
-  public CustomPopup(Stage primaryStage) {
-    this.primaryStage = primaryStage;
+  public CustomPopup() {
     setUp();
   }
 
@@ -22,7 +20,7 @@ public class CustomPopup {
  
   }
   
-  public void show() {
+  public void show(Stage primaryStage) {
     popup.show(primaryStage);
   }
   

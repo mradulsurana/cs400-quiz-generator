@@ -44,7 +44,7 @@ public class Quiz extends Application {
   }
   
   public void clear() {
-    this.count = 0;
+    this.count = 1;
     this.correct = 0;
     
   }
