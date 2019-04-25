@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 public class SceneAddQuestion extends Application {
 	Main mainClass;
 
-
+	// needs to take in parameter for topic list
 	public SceneAddQuestion(Main main) {
 		mainClass = main;
 	}
@@ -33,29 +33,33 @@ public class SceneAddQuestion extends Application {
 		Label text = new Label("Text");
 		Label topic = new Label("Topic");
 		Label image = new Label("Image");
-		Label choice = new Label("Choice");
+		Label choice = new Label("Options");
 		Label correct = new Label("Correct");
 		
-		RadioButton choice1, choice2, choice3, choice4;
+		RadioButton choice1, choice2, choice3, choice4, choice5;
 		choice1 = new RadioButton("A");
 		choice2 = new RadioButton("B");
 		choice3 = new RadioButton("C");
 		choice4 = new RadioButton("D");
+		choice5 = new RadioButton("E");
 	
-		ToggleGroup question = new ToggleGroup();
-
-		choice1.setToggleGroup(question);
-		choice2.setToggleGroup(question);
-		choice3.setToggleGroup(question);
-		choice4.setToggleGroup(question);
 		
-		TextField textField = new TextField("Enter Text Here");
-		TextField imageFile = new TextField("Enter Image File Name Here");
-		TextField choiceOne, choiceTwo, choiceThree, choiceFour;
-		choiceOne = new TextField("Choice One");
-		choiceTwo = new TextField("Choice Two");
-		choiceThree = new TextField("Choice Three");
-		choiceFour = new TextField("Choice Four");
+		TextField textField = new TextField();
+		TextField imageFile = new TextField();
+		TextField choiceOne, choiceTwo, choiceThree, choiceFour, choiceFive;
+		choiceOne = new TextField();
+		choiceTwo = new TextField();
+		choiceThree = new TextField();
+		choiceFour = new TextField();
+		choiceFive = new TextField();
+		
+		textField.setPromptText("Enter Question Here");
+		imageFile.setPromptText("Enter Image File Here");
+		choiceOne.setPromptText("Option One");
+		choiceTwo.setPromptText("Option Two");
+		choiceThree.setPromptText("Option Three");
+		choiceFour.setPromptText("Option Four");
+		choiceFive.setPromptText("Option Five");
 		
 		Button add = new Button("Add");
 		Button back = new Button("Back");
@@ -66,6 +70,7 @@ public class SceneAddQuestion extends Application {
 		choice2.setOnAction(e -> add.setDisable(false) );
 		choice3.setOnAction(e -> add.setDisable(false) );
 		choice4.setOnAction(e -> add.setDisable(false) );
+		choice5.setOnAction(e -> add.setDisable(false) );
 		
 		ComboBox topics = new ComboBox();
 		
@@ -81,6 +86,7 @@ public class SceneAddQuestion extends Application {
 		grid.add(choiceTwo, 0, 6, 1, 1);
 		grid.add(choiceThree, 0, 7, 1, 1);
 		grid.add(choiceFour, 0, 8, 1, 1);
+		grid.add(choiceFive, 0,  9, 1, 1);
 		
 		grid.add(textField, 1, 0, 1, 1);
 		grid.add(topics, 1, 1, 1, 1);
@@ -91,6 +97,7 @@ public class SceneAddQuestion extends Application {
 		grid.add(choice2, 1, 6, 1, 1);
 		grid.add(choice3, 1, 7, 1, 1);
 		grid.add(choice4, 1, 8, 1, 1);
+		grid.add(choice5, 1, 9, 1, 1);
 		
 		HBox bottomButtons = new HBox(2);
 		bottomButtons.getChildren().addAll(back, add);
