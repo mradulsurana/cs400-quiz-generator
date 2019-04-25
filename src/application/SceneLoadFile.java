@@ -83,7 +83,7 @@ public class SceneLoadFile extends Application {
 		Button btnLoad = new Button("Load File");
 		Button btnOpen = new Button("Open File");
 		leftBox.getChildren().addAll(prompt, pathName, btnOpen);
-		root.setLeft(leftBox);
+		root.setCenter(leftBox);
 		
 		btnOpen.setOnAction(e -> {
 			Stage s = new Stage();
