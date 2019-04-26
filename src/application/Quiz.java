@@ -68,7 +68,7 @@ public class Quiz extends Application {
   
    private ImageView createImage(String imageFile) {
   //create image 
-    Image placeholder = new Image("placeholder.png");
+    Image placeholder = new Image("application/placeholder.png");
     //put image into ImageView object
     ImageView i1 = new ImageView();
     i1.setImage(placeholder);
