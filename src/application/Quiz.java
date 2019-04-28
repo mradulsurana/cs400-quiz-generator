@@ -92,11 +92,12 @@ public class Quiz extends Application {
     
     //set the max
     this.max = this.questions.size();
+    this.count = 1;
+    this.correct = 0;
     //set the current question
     this.currentQuestion = this.questions.get(count-1);
     //set current question count and num correct
-    this.count = 1;
-    this.correct = 0;
+    
                      
   }
   
