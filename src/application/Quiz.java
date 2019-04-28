@@ -79,19 +79,23 @@ public class Quiz extends Application {
     this.questions = questions;
     this.sceneMain = sceneMain;
    
+    for(Question q: this.questions) {
+      if(!topics.contains(q.getTopic())) {
+        this.questions.remove(q);
+      }
+    }
     //randomize the order of questions
     Collections.shuffle(this.questions);
     
-    //create a question stream to filter them
-    this.questions.stream()
-    //make sure the question has proper topic
-    .filter(q -> topics.contains(q.getTopic()))
-    //limit amount of questions to int max
-    .limit(max)
-    .collect(Collectors.toList());
+    if(this.questions.size() < max) {
+      this.max = this.questions.size();
+      
+    } else {
+      this.questions = (ArrayList<Question>)this.questions.subList(0,max);
+      this.max = max;
+    }
+
     
-    //set the max
-    this.max = this.questions.size();
     this.count = 1;
     this.correct = 0;
     //set the current question
@@ -227,7 +231,10 @@ public void start(Stage primaryStage) {
   primaryStage.setTitle("Test Question "+count);
   
   this.setToggle();
+  System.out.println(this.currentQuestion.getImage().getHeight()+
+      " and "+this.currentQuestion.getImage().getWidth());
   this.createImage(this.currentQuestion.getImage());
+  
   this.buildTop(primaryStage);
   this.buildBottom(primaryStage);
   this.buildCenter(primaryStage);
