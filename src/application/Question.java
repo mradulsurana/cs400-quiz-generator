@@ -20,7 +20,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
- * A class that stores informat
+ * A class that stores information about a question 
+ * to be used in the quiz generator program, that includes
+ * the topic, choices, image, and question text
  * @author allen
  *
  */
