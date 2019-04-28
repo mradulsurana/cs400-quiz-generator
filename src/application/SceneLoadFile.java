@@ -23,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -36,12 +37,12 @@ import javafx.stage.Stage;
 
 public class SceneLoadFile extends Application {
 
-	Main mainScene;
-	Stage primaryStage;
-	BorderPane root;
-	ArrayList<Question> questions;
-	ArrayList<String> topicsStr;
-	ObservableList<String> topics;
+	Main mainScene; // instance to go back to when the files have been loaded
+	Stage primaryStage; // stage for displaying scenes
+	BorderPane root; // to display on scenes
+	ArrayList<Question> questions; // question which are parsed
+	ArrayList<String> topicsStr; // string arr of topics
+	ObservableList<String> topics; // topics as observable list
 
 	public SceneLoadFile(Main mainScene) {
 		this.mainScene = mainScene;
@@ -91,73 +92,80 @@ public class SceneLoadFile extends Application {
 			
 			String imageName = (String)jQuestion.get("image"); // only try and add an image if there is an image to add
 			if(!imageName.equals("none")) {
-				Path parent = Paths.get(filePath); // .json as path
-				Path child = Paths.get(parent.toString(), imageName); // gets the path of the sibling (image) of .json
-				File imageFile = new File(child.toString()); // converts the path of the image to a file
+				Path sibling = Paths.get(filePath); // .json as path
+				Path childImage = Paths.get(sibling.getParent().toString(), imageName); // gets the path of the sibling (image) of .json
+				File imageFile = new File(childImage.toString()); // converts the path of the image to a file
 				URL imageURL = imageFile.toURI().toURL(); // converts the image file to a url
 				Image qImage = new Image(imageURL.toString()); // converts the image url to an Image in fx
-				question.setImage(qImage); // connects the image to the question
+				ImageView image = new ImageView(qImage); // converts image so that it can be displayed in fx
+				question.setImage(image); // connects the image to the question
 			}
 			
 			JSONArray choices = (JSONArray) jQuestion.get("choiceArray"); // choices to parse
 			for(int j = 0; j < choices.size(); j++) { // iterate through choices
-				JSONObject choice = (JSONObject) choices.get(i); // the given choice
+				JSONObject choice = (JSONObject) choices.get(j); // the given choice
 				question.getAllAns().add((String) choice.get("choice")); // text of the given choice
 				if(((String)choice.get("isCorrect")).equals("T")) { // if correct, adds to correct ans list in question
-					question.getCorrectAns().add((String)choice.get("isCorrect"));
+					question.getCorrectAns().add((String)choice.get("choice"));
 				}
 			}
 			questions.add(question); // add the given question
 			if(!topics.contains(topic)) { // add the topic if not already a topic in the list of topics
 				topics.add(topic);
 			}
+			System.out.println("question: " + question.getQuestion());
+			System.out.println("topic: " + question.getTopic());
+			System.out.println("image: " + question.getImage());
+			System.out.println("all choices: " + question.getAllAns());
+			System.out.println("correct choices: " + question.getCorrectAns());
+			System.out.println();
 		}
 	}
 
 	private void buildMiddle() {
-		root.setCenter(null);
-		VBox leftBox = new VBox(30);
-		leftBox.setId("VBox");
+		root.setCenter(null); // resets the root (for recursive calls if want to load another file)
+		VBox middleBox = new VBox(30); // holds middle contents
+		middleBox.setId("VBox"); // css id
 
-		Label prompt = new Label("Please open and load a .json file");
-
-		Label pathName = new Label("                                               ");
-		pathName.setId("labelPathName");
+		Label prompt = new Label("Please open and load a .json file"); // communicate with user
+		
+		Label pathName = new Label("                                               "); // file path of .json loaded
+		pathName.setId("labelPathName"); // css id
+		// shows when no file is openned yet
 		pathName.setBackground(new Background(new BackgroundFill(Color.GHOSTWHITE, CornerRadii.EMPTY, Insets.EMPTY)));
 
+		Button btnLoad = new Button("Load File"); // to load file (parsing .json)
+		Button btnOpen = new Button("Open File"); // to open a .json
+		middleBox.getChildren().addAll(prompt, pathName, btnOpen); // fills middle of screen
+		root.setCenter(middleBox);
 		
-		Button btnLoad = new Button("Load File");
-		Button btnOpen = new Button("Open File");
-		leftBox.getChildren().addAll(prompt, pathName, btnOpen);
-		root.setCenter(leftBox);
-		
-		btnOpen.setOnAction(e -> {
-			Stage s = new Stage();
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.setTitle("Select a .json file");
-			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("JSON Files", "*.json"));
-			File selectedFile = fileChooser.showOpenDialog(s);
-			if(selectedFile != null) {
+		btnOpen.setOnAction(e -> { // if open button is pressed
+			Stage s = new Stage(); // stage for file explorer
+			FileChooser fileChooser = new FileChooser(); // to find file
+			fileChooser.setTitle("Select a .json file"); // name of window
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("JSON Files", "*.json")); // only can select .json files
+			File selectedFile = fileChooser.showOpenDialog(s); // show the file explorer
+			if(selectedFile != null) { // if file was selected...
 				
-				pathName.setText(selectedFile.getPath());
-				if(!leftBox.getChildren().contains(btnLoad)) {
-					leftBox.getChildren().addAll(btnLoad);
+				pathName.setText(selectedFile.getPath()); //get the path and display for user
+				if(!middleBox.getChildren().contains(btnLoad)) { //if load button not on the screen already...
+					middleBox.getChildren().addAll(btnLoad); // add it to the screen for parsing
 				}
 			}
 		});
 
-		btnLoad.setOnAction(e2 -> {
+		btnLoad.setOnAction(e2 -> { // if load button pressed
 			try {
-				if (pathName.getText() != null) {
-					parseQuestions(pathName.getText());
-					CustomPopup pop = new CustomPopup();
+				if (pathName.getText() != null) { // if a path was selected...
+					parseQuestions(pathName.getText()); // parse the file
+					CustomPopup pop = new CustomPopup(); // tell of parse success
 					pop.setLabel("File loaded successfully and questions were added.");
 					pop.show(primaryStage);
 				}
-				buildMiddle();
+				buildMiddle(); // user can load another file if they so choose
 				
-			} catch (Exception ex) {
-				CustomPopup pop = new CustomPopup();
+			} catch (Exception ex) { // parsing the file did not work
+				CustomPopup pop = new CustomPopup(); // tell the user and have them try again
 				pop.setLabel("Oops. The format of this JSON file was incorrect.\nPlease check over the file and try again.");
 				pop.show(primaryStage);
 			}
@@ -167,11 +175,12 @@ public class SceneLoadFile extends Application {
 
 	private void buildBottom() {
 
+		// display the back button to go back to the main home screen
 		HBox bottomBox = new HBox();
 		Button btnBack = new Button("Back");
 		bottomBox.getChildren().addAll(btnBack);
 
-		btnBack.setOnAction(e -> {
+		btnBack.setOnAction(e -> { // if pressed, the user is done loading and can move on with making a quiz
 			mainScene.subStart(primaryStage);
 		});
 
