@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
@@ -50,7 +53,7 @@ public class SceneLoadFile extends Application {
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws FileNotFoundException, IOException, ParseException {
+	public void start(Stage primaryStage) throws Exception {
 
 		this.primaryStage = primaryStage;
 		primaryStage.setTitle("Load Quiz Data");
@@ -73,7 +76,7 @@ public class SceneLoadFile extends Application {
 		return topics;
 	}
 
-	private void parseQuestions(String filePath) throws Exception {
+	private void parseQuestions(String filePath) throws FileNotFoundException, IOException, ParseException {
 		Object obj = new JSONParser().parse(new FileReader(filePath)); // parses .json to an Object
 		JSONObject jo = (JSONObject) obj; //casts to JSONObject
 		JSONArray qArr = (JSONArray) jo.get("questionArray"); // gets array of questions
@@ -83,12 +86,18 @@ public class SceneLoadFile extends Application {
 			JSONObject jQuestion = (JSONObject) qArr.get(i); // the question as a JSONObject
 			Question question = new Question((String)jQuestion.get("questionText")); // adds text of question
 			
-			question.setTopic((String)jQuestion.get("topic")); // adds the question topic
+			String topic = (String)jQuestion.get("topic");
+			question.setTopic(topic); // adds the question topic
 			
-			File childJson = new File(filePath); // .json as file object
-			String parentDir = childJson.getParent(); // parent dir which image should be in
-			Image qImage = new Image(parentDir + (String)jQuestion.get("image")); // image should be in same directory
-			question.setImage(qImage); // connects the image to the question
+			String imageName = (String)jQuestion.get("image"); // only try and add an image if there is an image to add
+			if(!imageName.equals("none")) {
+				Path parent = Paths.get(filePath); // .json as path
+				Path child = Paths.get(parent.toString(), imageName); // gets the path of the sibling (image) of .json
+				File imageFile = new File(child.toString()); // converts the path of the image to a file
+				URL imageURL = imageFile.toURI().toURL(); // converts the image file to a url
+				Image qImage = new Image(imageURL.toString()); // converts the image url to an Image in fx
+				question.setImage(qImage); // connects the image to the question
+			}
 			
 			JSONArray choices = (JSONArray) jQuestion.get("choiceArray"); // choices to parse
 			for(int j = 0; j < choices.size(); j++) { // iterate through choices
@@ -98,11 +107,15 @@ public class SceneLoadFile extends Application {
 					question.getCorrectAns().add((String)choice.get("isCorrect"));
 				}
 			}
-			
+			questions.add(question); // add the given question
+			if(!topics.contains(topic)) { // add the topic if not already a topic in the list of topics
+				topics.add(topic);
+			}
 		}
 	}
 
 	private void buildMiddle() {
+		root.setCenter(null);
 		VBox leftBox = new VBox(30);
 		leftBox.setId("VBox");
 
@@ -133,15 +146,19 @@ public class SceneLoadFile extends Application {
 			}
 		});
 
-		btnLoad.setOnAction(ev -> {
+		btnLoad.setOnAction(e2 -> {
 			try {
 				if (pathName.getText() != null) {
 					parseQuestions(pathName.getText());
+					CustomPopup pop = new CustomPopup();
+					pop.setLabel("File loaded successfully and questions were added.");
+					pop.show(primaryStage);
 				}
-				mainScene.subStart(primaryStage);
+				buildMiddle();
+				
 			} catch (Exception ex) {
 				CustomPopup pop = new CustomPopup();
-				pop.setLabel("Oops. The format of this JSON file was incorrect.");
+				pop.setLabel("Oops. The format of this JSON file was incorrect.\nPlease check over the file and try again.");
 				pop.show(primaryStage);
 			}
 		});
