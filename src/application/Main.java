@@ -1,5 +1,6 @@
 package application;
 
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,7 +20,9 @@ import javafx.scene.layout.VBox;
 public class Main extends Application {
 
   ObservableList<String> topics = FXCollections.observableArrayList();
+  ArrayList<Question> questions = new ArrayList<Question>();
   Scene scene;
+  private SceneLoadFile loadFileScene;
 
   // create buttons
   private Button btnStartQuiz = new Button("Start Quiz");
@@ -45,7 +48,7 @@ public class Main extends Application {
   private Label listTopicsLabel = new Label("Selected Topics");
 
   /**
-   * This is the main start method. It creates the GUI. 
+   * This is the main start method. It creates the GUI.
    */
   @Override
   public void start(Stage primaryStage) {
@@ -55,18 +58,23 @@ public class Main extends Application {
       topics.add("Topic" + i);
     }
 
-
     try {
-      // create main scene using borderpane
+      // create main scene using BorderPane
       BorderPane root = new BorderPane();
       createMainScene(root, primaryStage, topics);
-
+      
     } catch (Exception e) {
       // catch any unknown exceptions
     }
   }
 
   public void subStart(Stage primaryStage) {
+    // questions = loadfileScene.getQuestions(); // arraylist of type Questions
+    // topics = .getTopics // observable list of type String
+
+    getQuestionsLoadFile();
+
+
     primaryStage.setScene(scene);
     primaryStage.show();
 
@@ -102,12 +110,6 @@ public class Main extends Application {
      * Pos.CENTER_LEFT); BorderPane.setAlignment(lblWelcome, Pos.CENTER);
      * BorderPane.setAlignment(hbox, Pos.BOTTOM_CENTER);
      */
-
-
-
-
-
-    
 
 
 
@@ -155,7 +157,7 @@ public class Main extends Application {
   }
 
   public void setRight(BorderPane root) {
-    
+
     VBox vboxRight = new VBox(10); // create new VBox to store elements horizontally
     vboxRight.setId("VBox"); // set id to change CSS of VBox
     root.setRight(vboxRight); // add HBox to BorderPane left
@@ -164,12 +166,12 @@ public class Main extends Application {
     vboxRight.getChildren().add(listTopicsLabel);
     vboxRight.getChildren().add(listTopics);
     listTopics.setMinHeight(600); // set minimum height of topics list
-  
+
   }
 
   public void setBottom(BorderPane root) {
 
-    
+
     HBox hbox = new HBox(10); // create new HBox to store elements horizontally
     root.setBottom(hbox); // add HBox to BorderPane bottom
 
@@ -186,20 +188,20 @@ public class Main extends Application {
 
       try {
         int numQuestions = Integer.parseInt(txtNumQuestions.getText());
-        if (!txtNumQuestions.getText().equals("") && !listTopics.getItems().isEmpty() && (numQuestions > 0)) {
-          
+        if (!txtNumQuestions.getText().equals("") && !listTopics.getItems().isEmpty()
+            && (numQuestions > 0)) {
+
           // clear fields so the next time the user creates a quiz the fields are reset
           txtNumQuestions.clear();
           listTopics.getItems().clear();
-          
+
           // create and start Quiz scene
-          Quiz quizScene = new Quiz(this);
-          quizScene.clear();
-          quizScene.setNumQuestions(numQuestions);
+          Quiz quizScene = new Quiz(this, questions, numQuestions, topics);
           quizScene.start(primaryStage);
-          
+
         } else { // prompt user to fill out fields
-          popup.setLabel("Please enter a positive number of questions and choose at least one topic");
+          popup.setLabel(
+              "Please enter a positive number of questions and choose at least one topic");
           popup.show(primaryStage);
         }
 
@@ -239,7 +241,7 @@ public class Main extends Application {
 
     // display load JSON screen
     btnLoad.setOnAction(e -> {
-      SceneLoadFile loadFileScene = new SceneLoadFile(this);
+      loadFileScene = new SceneLoadFile(this);
       try {
         loadFileScene.start(primaryStage);
       } catch (Exception e1) {
@@ -257,5 +259,14 @@ public class Main extends Application {
       }
     });
   }
+
+  private void getQuestionsLoadFile() {
+    // get the questions loaded from the JSON file
+    for (int i = 0; i < loadFileScene.getQuestions().size(); i++) {
+      questions.add(loadFileScene.getQuestions().get(i));
+      topics.addAll(loadFileScene.getTopics());
+    }
+  }
+
 
 }
