@@ -8,6 +8,10 @@ import javafx.geometry.Pos;
 import static javafx.application.Application.launch;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -55,22 +59,30 @@ public class Quiz extends Application {
   public Quiz(Main sceneMain, ArrayList<Question> questions, int max, ObservableList<String> topics) {
     this.questions = questions;
     this.sceneMain = sceneMain;
+   
+    Collections.shuffle(this.questions);
+    this.questions.stream()
+    .filter(q -> topics.contains(q.getTopic()))
+    .limit(max)
+    .collect(Collectors.toList());
+    
+    this.max = this.questions.size();
     this.currentQuestion = this.questions.get(count-1);
     this.count = 1;
     this.correct = 0;
-    this.max = max;
+                     
   }
   
   
   
   private void setToggle() {
-    Question testQuestion = this.questions.get(count-1);
+    
     this.toggles = new ArrayList<RadioButton>();
     this.correctToggles = new ArrayList<RadioButton>();
-    for(String c : testQuestion.getAllAns()) {
+    for(String c : this.currentQuestion.getAllAns()) {
       RadioButton button = new RadioButton(c);
       this.toggles.add(button);
-      if(testQuestion.getCorrectAns().contains(c)) {
+      if(this.currentQuestion.getCorrectAns().contains(c)) {
         this.correctToggles.add(button);
       }
     }
@@ -155,7 +167,7 @@ public void start(Stage primaryStage) {
   primaryStage.setTitle("Test Question "+count);
   
   this.setToggle();
-  this.createImage(null);
+  this.createImage(this.currentQuestion.getImage());
   this.builtTop(primaryStage);
   this.buildBottom(primaryStage);
   this.buildCenter(primaryStage);
