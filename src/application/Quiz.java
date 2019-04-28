@@ -76,12 +76,11 @@ public class Quiz extends Application {
    */
   public Quiz(Main sceneMain, ArrayList<Question> questions, int max, ObservableList<String> topics) {
     //initially set the list of questions to be all the questions
-    this.questions = questions;
-    this.sceneMain = sceneMain;
-   
-    for(Question q: this.questions) {
-      if(!topics.contains(q.getTopic())) {
-        this.questions.remove(q);
+    this.questions = new ArrayList<Question>();
+    
+    for(Question q: questions) {
+      if(topics.contains(q.getTopic())) {
+        this.questions.add(q);
       }
     }
     //randomize the order of questions
@@ -135,7 +134,7 @@ public class Quiz extends Application {
     //put image into ImageView object
     ImageView i1 = imageFile;
     //set size of image
-    i1.setFitWidth(200);
+    i1.setFitWidth(400);
     //maintain ratio of image
     i1.setPreserveRatio(true);
     //keep image quality
