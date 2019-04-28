@@ -161,6 +161,8 @@ public class Quiz extends Application {
      //button for going to next question
      Button button= new Button("Next");
      button.setDisable(true);
+     CustomPopup popup = new CustomPopup();
+     boolean isCorrect = false;
 
      //toggle group so that only one button can be selected
      ToggleGroup question1= new ToggleGroup();
@@ -173,13 +175,19 @@ public class Quiz extends Application {
      }
 
      //defines what happens when 
+    
      button.setOnAction(e -> 
      {
        for(RadioButton r2: this.toggles) {
-         if(this.correctToggles.contains(r2)) {
            if(r2.isSelected() ) {
+          if (this.correctToggles.contains(r2)) {
              correct++;
+             popup.setLabel("Answer was correct!");
+             popup.show(primaryStage);
              break;
+           } else {
+             popup.setLabel("Answer was incorrect!");
+             popup.show(primaryStage);
            }
          }
        }
