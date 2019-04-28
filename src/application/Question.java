@@ -21,22 +21,47 @@ import javafx.stage.Stage;
 
 
 public class Question {
+  private String topic;
   private String question;
-  private Image image;
-  public ArrayList<String> correctAns;
-  public ArrayList<String> incorrectAns;
+  private String image;
+  private ArrayList<String> correctAns;
+  private ArrayList<String> allAns;
   
   public Question(String question) {
     this.question = question;
     this.correctAns = new ArrayList<String>();
-    this.incorrectAns = new ArrayList<String>();
+    this.allAns = new ArrayList<String>();
+  }
+  
+  public void setCorrectAns(String correctAns) {
+    this.correctAns.add(correctAns);
+  }
+  
+  public ArrayList<String> getCorrectAns() {
+    return this.correctAns;
+  }
+  
+  public void setAllAns(String allAns) {
+    this.allAns.add(allAns);
+  }
+  
+  public ArrayList<String> getAllAns() {
+    return this.allAns;
+  }
+  
+  public void setTopic(String topic) {
+    this.topic = topic;
+  }
+  
+  public String getTopic() {
+    return this.topic;
   }
   
   public void setQuestion(String question) {
     this.question = question;
   }
   
-  public void setImage(Image image) {
+  public void setImage(String image) {
     this.image = image;
   }
   
@@ -44,7 +69,7 @@ public class Question {
     return this.question;
   }
   
-  public Image getImage() {
+  public String getImage() {
     return this.image;
   }
 }
