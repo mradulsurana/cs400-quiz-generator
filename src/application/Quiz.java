@@ -25,60 +25,92 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-
+/**
+ * This class starts displays a Quiz of a certain
+ * amount of Questions and filtered by topic and 
+ * allows the user to answer them. It keeps track
+ * of how many questions were answered correctly
+ * @author allen
+ *
+ */
 public class Quiz extends Application {
+  //the arraylist of Questions that will be asked to the user
   private static ArrayList<Question> questions;
+  //the buttons that the user can select to answer
   private ArrayList<RadioButton> toggles;
+  //the buttons that are the correct answer
   private ArrayList<RadioButton> correctToggles;
+  //how many questions have been asked
   private static int count;
+  //how many questions have been answered correctly
   private static int correct;
+  //how many questions there are in total
   private static int max;
+  //the main page that linked to this page
   private static Main sceneMain;
+  //the object that will be in the scene
   private BorderPane root = new BorderPane();
+  //image for the question
   private ImageView i1;
+  //the current question
   private Question currentQuestion;
   
+  /**
+   * Private constructor that will only be called within this class
+   * to move on to the next question
+   * @param sceneMain
+   */
   private Quiz(Main sceneMain) {
-    /**
-    if(count == 0) { 
-    this.questions = new ArrayList<Question>();
-    Question testQuestion = new Question("What is the answer to the question?"); 
-    testQuestion.correctAns.add("A");
-    testQuestion.allAns.add("A");
-    testQuestion.allAns.add("B");
-    testQuestion.allAns.add("C");
-    testQuestion.allAns.add("D");
-    this.questions.add(testQuestion);
-    this.sceneMain = sceneMain;
-    }
-    **/
+    //iterate count since this is a new question in the quiz
     count++;
+    //set the current question
     this.currentQuestion = this.questions.get(count-1);
   }
   
+  /**
+   * Public constructor called by the main page to start a new quiz
+   * @param sceneMain is the scene that linked to the quiz
+   * @param questions is a list of all questions that can be asked
+   * @param max is the amount of questions for the quiz
+   * @param topics is the list of topics for the quiz
+   */
   public Quiz(Main sceneMain, ArrayList<Question> questions, int max, ObservableList<String> topics) {
+    //initially set the list of questions to be all the questions
     this.questions = questions;
     this.sceneMain = sceneMain;
    
+    //randomize the order of questions
     Collections.shuffle(this.questions);
+    
+    //create a question stream to filter them
     this.questions.stream()
+    //make sure the question has proper topic
     .filter(q -> topics.contains(q.getTopic()))
+    //limit amount of questions to int max
     .limit(max)
     .collect(Collectors.toList());
     
+    //set the max
     this.max = this.questions.size();
+    //set the current question
     this.currentQuestion = this.questions.get(count-1);
+    //set current question count and num correct
     this.count = 1;
     this.correct = 0;
                      
   }
   
-  
-  
+  /**
+   * This method creates all the toggle buttons for the multiple choice
+   * question
+   */
   private void setToggle() {
-    
+    //initialize the toggle list
     this.toggles = new ArrayList<RadioButton>();
     this.correctToggles = new ArrayList<RadioButton>();
+    
+    //iterate through the answers and create a button
+    //for each answer, and save the correct answers
     for(String c : this.currentQuestion.getAllAns()) {
       RadioButton button = new RadioButton(c);
       this.toggles.add(button);
@@ -88,6 +120,10 @@ public class Quiz extends Application {
     }
   }
   
+  /**
+   * This method formats the question image
+   * @param imageFile is the image to be formated
+   */
    private void createImage(Image imageFile) {
   //create image 
     Image placeholder = imageFile;
@@ -104,23 +140,38 @@ public class Quiz extends Application {
     this.i1 = i1;
   }
    
-   private void builtTop(Stage primaryStage) {
+   /**
+    * This method sets the top pane of the root that will be
+    * put in scene
+    * @param primaryStage is the Stage that quiz will show
+    */
+   private void buildTop(Stage primaryStage) {
      root.setTop(this.i1);
      root.setAlignment(this.i1, Pos.CENTER);
      root.setMargin(this.i1, new Insets(50));
    }
    
+   /**
+    * This method sets the bottom pane of the root that will 
+    * be put in scene
+    * @param primaryStage is stage of the Quiz
+    */
    private void buildBottom(Stage primaryStage) {
+     //button for going to next question
      Button button= new Button("Next");
      button.setDisable(true);
 
+     //toggle group so that only one button can be selected
      ToggleGroup question1= new ToggleGroup();
 
+     // add buttons to the toggle group and allow next button
+     // to be pressed once an answer is selected
      for(RadioButton r: this.toggles) {
        r.setToggleGroup(question1);
        r.setOnAction(e -> button.setDisable(false));
      }
 
+     //defines what happens when 
      button.setOnAction(e -> 
      {
        for(RadioButton r2: this.toggles) {
@@ -168,7 +219,7 @@ public void start(Stage primaryStage) {
   
   this.setToggle();
   this.createImage(this.currentQuestion.getImage());
-  this.builtTop(primaryStage);
+  this.buildTop(primaryStage);
   this.buildBottom(primaryStage);
   this.buildCenter(primaryStage);
   
