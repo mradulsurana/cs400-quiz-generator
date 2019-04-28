@@ -32,7 +32,7 @@ public class Question {
   //question text
   private String question;
   //question image
-  private Image image;
+  private ImageView image;
   //correct answers to the question
   private ArrayList<String> correctAns;
   //all answers to the question
@@ -117,7 +117,7 @@ public class Question {
    * This method sets the image for the question
    * @param image is the image for the question
    */
-  public void setImage(Image image) {
+  public void setImage(ImageView image) {
     this.image = image;
   }
   
@@ -125,7 +125,7 @@ public class Question {
    * This method gets the image for the question
    * @return image of the question
    */
-  public Image getImage() {
+  public ImageView getImage() {
     return this.image;
   }
 }

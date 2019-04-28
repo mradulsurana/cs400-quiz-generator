@@ -129,12 +129,11 @@ public class Quiz extends Application {
    * This method formats the question image
    * @param imageFile is the image to be formated
    */
-   private void createImage(Image imageFile) {
+   private void createImage(ImageView imageFile) {
   //create image 
-    Image placeholder = imageFile;
+  
     //put image into ImageView object
-    ImageView i1 = new ImageView();
-    i1.setImage(placeholder);
+    ImageView i1 = imageFile;
     //set size of image
     i1.setFitWidth(200);
     //maintain ratio of image
@@ -231,8 +230,6 @@ public void start(Stage primaryStage) {
   primaryStage.setTitle("Test Question "+count);
   
   this.setToggle();
-  System.out.println(this.currentQuestion.getImage().getHeight()+
-      " and "+this.currentQuestion.getImage().getWidth());
   this.createImage(this.currentQuestion.getImage());
   
   this.buildTop(primaryStage);
