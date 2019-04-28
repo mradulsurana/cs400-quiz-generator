@@ -19,11 +19,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-
+/**
+ * A class that stores informat
+ * @author allen
+ *
+ */
 public class Question {
   private String topic;
   private String question;
-  private String image;
+  private Image image;
   private ArrayList<String> correctAns;
   private ArrayList<String> allAns;
   
@@ -61,7 +65,7 @@ public class Question {
     this.question = question;
   }
   
-  public void setImage(String image) {
+  public void setImage(Image image) {
     this.image = image;
   }
   
@@ -69,7 +73,7 @@ public class Question {
     return this.question;
   }
   
-  public String getImage() {
+  public Image getImage() {
     return this.image;
   }
 }
