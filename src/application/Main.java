@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -187,12 +188,15 @@ public class Main extends Application {
         if (!txtNumQuestions.getText().equals("") && !listTopics.getItems().isEmpty()
             && (numQuestions > 0)) {
 
+          ObservableList<String> selectedTopics = FXCollections.observableArrayList();
+          selectedTopics.addAll(listTopics.getItems());
+          
           // clear fields so the next time the user creates a quiz the fields are reset
           txtNumQuestions.clear();
           listTopics.getItems().clear();
 
           // create and start Quiz scene
-          Quiz quizScene = new Quiz(this, questions, numQuestions, listTopics.getItems());
+          Quiz quizScene = new Quiz(this, questions, numQuestions, selectedTopics);
           quizScene.start(primaryStage);
 
           
