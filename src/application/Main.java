@@ -53,11 +53,6 @@ public class Main extends Application {
   @Override
   public void start(Stage primaryStage) {
 
-    // populate topics with sample values
-    for (int i = 0; i < 50; i++) {
-      topics.add("Topic" + i);
-    }
-
     try {
       // create main scene using BorderPane
       BorderPane root = new BorderPane();
@@ -73,7 +68,8 @@ public class Main extends Application {
     // topics = .getTopics // observable list of type String
 
     getQuestionsLoadFile();
-
+    loadFileScene = null;
+    
 
     primaryStage.setScene(scene);
     primaryStage.show();
@@ -196,9 +192,10 @@ public class Main extends Application {
           listTopics.getItems().clear();
 
           // create and start Quiz scene
-          Quiz quizScene = new Quiz(this, questions, numQuestions, topics);
+          Quiz quizScene = new Quiz(this, questions, numQuestions, listTopics.getItems());
           quizScene.start(primaryStage);
 
+          
         } else { // prompt user to fill out fields
           popup.setLabel(
               "Please enter a positive number of questions and choose at least one topic");
@@ -258,14 +255,20 @@ public class Main extends Application {
 
       }
     });
+    
+    //TODO: add code that gives popup when no topics are there
+    
   }
 
   private void getQuestionsLoadFile() {
     // get the questions loaded from the JSON file
-    for (int i = 0; i < loadFileScene.getQuestions().size(); i++) {
-      questions.add(loadFileScene.getQuestions().get(i));
+    if (loadFileScene != null) {
+      for (int i = 0; i < loadFileScene.getQuestions().size(); i++) {
+        questions.add(loadFileScene.getQuestions().get(i));
+      }
       topics.addAll(loadFileScene.getTopics());
     }
+    
   }
 
 
