@@ -139,20 +139,22 @@ public class SceneAddQuestion extends Application {
 		root.setTop(grid);
 		root.setBottom(bottomButtons);
 
-
 		loadImageFile.setOnAction(ee -> {
 			Stage s = new Stage(); // stage for file explorer
 			FileChooser fileChooser = new FileChooser(); // to find file
 			fileChooser.setTitle("Select a .json file"); // name of window
-			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("PNG File", "*.png")); // only can select .json
-																								// files
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("PNG File", "*.png"),
+					new ExtensionFilter("JPEG File", "*.jpeg")); // only can select .json
+																	// files
 			File selectedFile = fileChooser.showOpenDialog(s); // show the file explorer
-
+			if (selectedFile != null)
 			imageFile.setText(selectedFile.getPath()); // get the path and display for user
 		});
 
 		add.setOnAction(eee -> {
 			try {
+				CustomPopup popup = new CustomPopup();
+
 				File file = new File(imageFile.getText().toString()); // converts the path of the image to a file
 				URL imageURL = file.toURI().toURL();
 				Image qImage = new Image(imageURL.toString()); // converts the image url to an Image in fx
@@ -176,17 +178,6 @@ public class SceneAddQuestion extends Application {
 				answers.add(choiceFive.getText());
 				ArrayList<String> correctAnswers = new ArrayList<String>();
 
-				if (choice1.isSelected())
-					correctAnswers.add(choiceOne.getText());
-				if (choice2.isSelected())
-					correctAnswers.add(choiceTwo.getText());
-				if (choice3.isSelected())
-					correctAnswers.add(choiceThree.getText());
-				if (choice4.isSelected())
-					correctAnswers.add(choiceFour.getText());
-				if (choice5.isSelected())
-					correctAnswers.add(choiceFive.getText());
-
 				boolean answersEmpty = true;
 				int j = 0;
 				for (int i = 0; i < answers.size(); ++i) {
@@ -194,48 +185,84 @@ public class SceneAddQuestion extends Application {
 						j++;
 					}
 				}
+
 				if (j >= 2)
 					answersEmpty = false;
 
-				if (correctAnswers.isEmpty()) {
-					CustomPopup popup = new CustomPopup();
-					popup.setLabel("Please select at least one correct answer");
-					popup.show(primaryStage);
-				} else if (!isNewTopic && topicComboBox.getValue().equals(null)) {
-					CustomPopup popup = new CustomPopup();
-					popup.setLabel("Please pick a topic or enter new topic");
-					popup.show(primaryStage);
-//				} else if (!topicComboBox.getValue().equals(null)) {
-//					CustomPopup popup = new CustomPopup();
-//					popup.setLabel("Please only pick a topic OR enter new topic");
-//					popup.show(primaryStage);
-				} else if (questionText.equals("")) {
-					CustomPopup popup = new CustomPopup();
-					popup.setLabel("Please enter text for a question");
-					popup.show(primaryStage);
-				} else if (imageFile.getText().equals("")) {
-					CustomPopup popup = new CustomPopup();
-					popup.setLabel("Please select an image file");
-					popup.show(primaryStage);
-				} else if (answersEmpty) {
-					CustomPopup popup = new CustomPopup();
-					popup.setLabel("Please enter at least two answers");
-					popup.show(primaryStage);
+				boolean bad = false;
+
+				if (choice1.isSelected()) {
+					if (!choiceOne.getText().equals(""))
+						correctAnswers.add(choiceOne.getText());
+					else {
+						bad = true;
+					}
+				}
+				if (choice2.isSelected()) {
+					if (!choiceTwo.getText().equals(""))
+						correctAnswers.add(choiceTwo.getText());
+					else {
+						bad = true;
+					}
+				}
+				if (choice3.isSelected()) {
+					if (!choiceThree.getText().equals(""))
+						correctAnswers.add(choiceThree.getText());
+					else {
+						bad = true;
+					}
+				}
+				if (choice4.isSelected()) {
+					if (!choiceFour.getText().equals(""))
+						correctAnswers.add(choiceFour.getText());
+					else {
+						bad = true;
+					}
+				}
+				if (choice5.isSelected()) {
+					if (!choiceFive.getText().equals(""))
+						correctAnswers.add(choiceFive.getText());
+					else {
+						bad = true;
+					}
 				}
 
-				 if (isNewTopic) {
-				 newTopics.add(topicChosen);
-				 }
+				if (correctAnswers.isEmpty() || bad) {
+					popup.setLabel("Please only select correct answers that have an answer given");
+					popup.show(primaryStage);
+				} else if (!isNewTopic && topicChosen == null) {
+					popup.setLabel("Please pick a topic or enter new topic");
+					popup.show(primaryStage);
+				} else if ((String) topicComboBox.getValue() != null) {
+					popup.setLabel("Please only pick a topic OR enter new topic");
+					popup.show(primaryStage);
+				} else if (questionText.equals("")) {
+					popup.setLabel("Please enter text for a question");
+					popup.show(primaryStage);
+				} else if (answersEmpty) {
+					popup.setLabel("Please enter at least two answers");
+					popup.show(primaryStage);
+				} else {
 
-				Question newQuestion = new Question(questionText);
-				for (int k = 0; k < correctAnswers.size(); ++k)
-					newQuestion.setCorrectAns(correctAnswers.get(k));
-				for (int l = 0; l < answers.size(); ++l)
-					newQuestion.setAllAns(answers.get(l));
-				newQuestion.setTopic(topicChosen);
-				newQuestion.setImage(imageView);
+					if (isNewTopic) {
+						newTopics.add(topicChosen);
+					}
 
-				allQuestions.add(newQuestion);
+					Question newQuestion = new Question(questionText);
+					for (int k = 0; k < correctAnswers.size(); ++k)
+						newQuestion.setCorrectAns(correctAnswers.get(k));
+					for (int l = 0; l < answers.size(); ++l)
+						newQuestion.setAllAns(answers.get(l));
+					newQuestion.setTopic(topicChosen);
+					if (!imageFile.getText().equals(""))
+						newQuestion.setImage(imageView);
+
+					allQuestions.add(newQuestion);
+					if (allQuestions.contains(newQuestion)) {
+						popup.setLabel("Question was added, press back to return home, or add a new question");
+						popup.show(primaryStage);
+					}
+				}
 
 			} catch (MalformedURLException e1) {
 				e1.printStackTrace();
@@ -255,8 +282,8 @@ public class SceneAddQuestion extends Application {
 
 	}
 
-	private void getNewTopics() {
-		// new class for getting new topics
+	private ObservableList<String> getNewTopics() {
+		return newTopics;
 	}
 
 	public ArrayList<Question> getQuestions() {

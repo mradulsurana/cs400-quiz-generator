@@ -47,6 +47,7 @@ public class Question {
     //initializes array lists for correct and all answers
     this.correctAns = new ArrayList<String>();
     this.allAns = new ArrayList<String>();
+    this.image = null;
   }
   
   /**

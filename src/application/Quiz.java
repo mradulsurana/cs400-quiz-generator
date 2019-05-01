@@ -65,6 +65,7 @@ public class Quiz extends Application {
     count++;
     //set the current question
     this.currentQuestion = this.questions.get(count-1);
+    this.i1 = this.currentQuestion.getImage();
   }
   
   /**
@@ -86,11 +87,16 @@ public class Quiz extends Application {
     //randomize the order of questions
     Collections.shuffle(this.questions);
     
-    if(this.questions.size() < max) {
+    if(this.questions.size() <= max) {
+     
       this.max = this.questions.size();
       
     } else {
-      this.questions = (ArrayList<Question>)this.questions.subList(0,max);
+      
+      for(int i=0;i<this.questions.size()-max;i++) {
+        this.questions.remove(0);
+      }
+      //this.questions = (ArrayList<Question>)this.questions.subList(0,max);
       this.max = max;
     }
 
@@ -100,15 +106,10 @@ public class Quiz extends Application {
     //set the current question
     this.currentQuestion = this.questions.get(count-1);
     //set current question count and num correct
+    this.i1 = this.currentQuestion.getImage();
+    this.sceneMain = sceneMain;
     
-    for(String s: topics) {
-      System.out.println(s);
-    }
     
-    for(Question q: this.questions) {
-      System.out.println(q.getQuestion());
-      
-    }
     
                      
   }
@@ -137,11 +138,10 @@ public class Quiz extends Application {
    * This method formats the question image
    * @param imageFile is the image to be formated
    */
-   private void createImage(ImageView imageFile) {
+   private void createImage() {
   //create image 
   
-    //put image into ImageView object
-    ImageView i1 = imageFile;
+    
     //set size of image
     i1.setFitWidth(400);
     //maintain ratio of image
@@ -149,7 +149,7 @@ public class Quiz extends Application {
     //keep image quality
     i1.setSmooth(true);
     i1.setCache(true);
-    this.i1 = i1;
+    
   }
    
    /**
@@ -158,9 +158,22 @@ public class Quiz extends Application {
     * @param primaryStage is the Stage that quiz will show
     */
    private void buildTop(Stage primaryStage) {
-     root.setTop(this.i1);
-     root.setAlignment(this.i1, Pos.CENTER);
-     root.setMargin(this.i1, new Insets(50));
+     if(this.currentQuestion.getImage() != null) {
+       ImageView i1 = new ImageView();
+       i1 = this.currentQuestion.getImage();
+     //set size of image
+       i1.setFitWidth(400);
+       //maintain ratio of image
+       i1.setPreserveRatio(true);
+       //keep image quality
+       i1.setSmooth(true);
+       i1.setCache(true);
+       System.out.print(i1);
+     root.setTop(i1);
+     System.out.println("Build top");
+     root.setAlignment(i1, Pos.CENTER);
+     root.setMargin(i1, new Insets(50));
+     }
    }
    
    /**
@@ -207,7 +220,7 @@ public class Quiz extends Application {
          next.start(primaryStage);
        }
        else {
-         Results result = new Results(sceneMain,count,correct);
+         Results result = new Results(this.questions,sceneMain,count,correct);
          result.start(primaryStage);
        };
      });
@@ -223,6 +236,7 @@ public class Quiz extends Application {
    private void buildCenter(Stage primaryStage) {
    //label for question text
      Label labelQuestion = new Label(this.currentQuestion.getQuestion());
+     labelQuestion.setWrapText(true);
      VBox layout= new VBox(5);
      layout.getChildren().add(labelQuestion);
      
@@ -235,20 +249,29 @@ public class Quiz extends Application {
 
 @Override
 public void start(Stage primaryStage) {
+  
   primaryStage.setTitle("Test Question "+count);
   
   this.setToggle();
-  this.createImage(this.currentQuestion.getImage());
   
+    
   this.buildTop(primaryStage);
+    
+  
+  
   this.buildBottom(primaryStage);
   this.buildCenter(primaryStage);
   
+  root.setPadding(new Insets(10));
+   
+  //Image image = new Image("application/placeholder.png");
+  //ImageView i1 = new ImageView(image);
+ 
   
   Scene scene1= new Scene(root, 1400, 864);
   scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
   primaryStage.setScene(scene1);
-        
+  System.out.println(this.currentQuestion.getImage());
   primaryStage.show();
   }
 
