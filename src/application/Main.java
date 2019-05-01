@@ -252,7 +252,7 @@ public class Main extends Application {
 
     // display load JSON screen
     btnAddQuestions.setOnAction(e -> {
-      SceneAddQuestion addQuestionScene = new SceneAddQuestion(this);
+      SceneAddQuestion addQuestionScene = new SceneAddQuestion(this, topics);
       try {
         addQuestionScene.start(primaryStage);
       } catch (Exception e1) {
