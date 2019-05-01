@@ -148,7 +148,7 @@ public class SceneAddQuestion extends Application {
 																	// files
 			File selectedFile = fileChooser.showOpenDialog(s); // show the file explorer
 			if (selectedFile != null)
-			imageFile.setText(selectedFile.getPath()); // get the path and display for user
+				imageFile.setText(selectedFile.getPath()); // get the path and display for user
 		});
 
 		add.setOnAction(eee -> {
@@ -168,6 +168,7 @@ public class SceneAddQuestion extends Application {
 					topicChosen = topicField.getText();
 					isNewTopic = true;
 				}
+
 				String questionText = textField.getText();
 
 				ArrayList<String> answers = new ArrayList<String>();
@@ -228,7 +229,7 @@ public class SceneAddQuestion extends Application {
 				}
 
 				if (correctAnswers.isEmpty() || bad) {
-					popup.setLabel("Please only select correct answers that have an answer given");
+					popup.setLabel("Please select correct answers that have an answer given");
 					popup.show(primaryStage);
 				} else if (!isNewTopic && topicChosen == null) {
 					popup.setLabel("Please pick a topic or enter new topic");
@@ -282,7 +283,7 @@ public class SceneAddQuestion extends Application {
 
 	}
 
-	private ObservableList<String> getNewTopics() {
+	private ObservableList<String> getTopics() {
 		return newTopics;
 	}
 
