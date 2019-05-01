@@ -101,6 +101,15 @@ public class Quiz extends Application {
     this.currentQuestion = this.questions.get(count-1);
     //set current question count and num correct
     
+    for(String s: topics) {
+      System.out.println(s);
+    }
+    
+    for(Question q: this.questions) {
+      System.out.println(q.getQuestion());
+      
+    }
+    
                      
   }
   
