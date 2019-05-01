@@ -14,10 +14,13 @@
 	-fx-font-weight: bold;
 }
 
-#gridpane {
+#leftVBox, #gridpane {
 	-fx-alignment: center;
 	-fx-vgap: 80.0;
-    
+}
+
+#gridpane {
+	
 }
 
 #popup {
