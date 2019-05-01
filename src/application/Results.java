@@ -55,8 +55,31 @@ public class Results extends Application{
     makeNew.setOnAction(e -> {
       this.mainScene.subStart(primaryStage);
     });
+    
     Button exit = new Button("Exit");
-    exit.setOnAction(e -> Platform.exit());
+    exit.setOnAction(e -> {
+    	
+//    	CustomPopup pop = new CustomPopup();
+//		pop.setLabel("Goodbye, have a great day!");
+//		pop.show(primaryStage);
+		
+    	ExitPopup pop = new ExitPopup(primaryStage);
+    	pop.show(primaryStage);
+    	
+    	
+    	
+//    	try
+//    	{
+//    	    Thread.sleep(3000);
+//    	}
+//    	catch(InterruptedException ex)
+//    	{
+//    	    Thread.currentThread().interrupt();
+//    	}
+//    	
+//    	Platform.exit();
+    });
+    
     v.getChildren().addAll(correct,incorrect,percent);
     h.getChildren().addAll(makeNew,exit);
     root.setCenter(v);

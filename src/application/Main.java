@@ -256,7 +256,7 @@ public class Main extends Application {
       try {
         addQuestionScene.start(primaryStage);
       } catch (Exception e1) {
-
+    	  
       }
     });
     
