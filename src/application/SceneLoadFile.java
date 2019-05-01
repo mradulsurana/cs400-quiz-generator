@@ -56,9 +56,11 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 /**
+ * Loads a .json file from the user using a file explorer. (any images referenced from the .json should be in the
+ * same directory as the .json itself. Users can load multiple .jsons before returning to the home screen using
+ * the back button.
  * 
- * 
- * @author Holms31
+ * @author Alfred Holmbeck, Mradul Surana, Allen Chang, Michael Lyrek, Jordan Ingbretson
  *
  */
 public class SceneLoadFile extends Application {
@@ -169,6 +171,8 @@ public class SceneLoadFile extends Application {
 //			System.out.println("correct choices: " + question.getCorrectAns());
 //			System.out.println();
 		}
+		//UNCOMMENT FOR TESTING
+//		System.out.println(topics);
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,8 +17,18 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 
 
+/**
+ * This class is the main driver application for the entire program and holds the GUI elements for
+ * the main page. The application allows users to load questions from a JSON file, create new
+ * questions from the applications itself, take a quiz based on loaded or created questions (user
+ * can select topics and number of questions), and save 
+ * 
+ * @author Mradul Surana,
+ *
+ */
 public class Main extends Application {
 
   ObservableList<String> topics = FXCollections.observableArrayList();
@@ -47,6 +58,7 @@ public class Main extends Application {
   // create labels
   private Label lblWelcome = new Label("Welcome to Quiz Generator");
   private Label listTopicsLabel = new Label("Selected Topics");
+  private Label lblTotalQuestions = new Label("Number of Questions in Question Database: 0");
 
   /**
    * This is the main start method. It creates the GUI.
@@ -58,7 +70,7 @@ public class Main extends Application {
       // create main scene using BorderPane
       BorderPane root = new BorderPane();
       createMainScene(root, primaryStage, topics);
-      
+
     } catch (Exception e) {
       // catch any unknown exceptions
     }
@@ -68,10 +80,13 @@ public class Main extends Application {
     // questions = loadfileScene.getQuestions(); // arraylist of type Questions
     // topics = .getTopics // observable list of type String
 
-    getQuestionsLoadFile();
-    loadFileScene = null;
-    
+    getQuestionsLoadFile(); // get new questions and topics
+    loadFileScene = null; // set this to null so it cannot be called again
 
+    Collections.sort(topics); // sort topics alphabetically since new topics may have been added
+    
+    lblTotalQuestions.setText("Number of Questions in Question Database: " + questions.size());
+        
     primaryStage.setScene(scene);
     primaryStage.show();
 
@@ -125,11 +140,13 @@ public class Main extends Application {
   public void setLeft(BorderPane root) {
 
     // create layout box to hold other elements
+    VBox vbox = new VBox(80);
     GridPane gridpane = new GridPane();
     gridpane.setHgap(10); // set padding between HBox elements
+    vbox.setId("leftVBox"); // give gridpane an id to apply CSS
     gridpane.setId("gridpane"); // give gridpane an id to apply CSS
 
-    root.setLeft(gridpane); // add gridpane to borderpane
+    root.setLeft(vbox); // add gridpane to borderpane
 
     // create labels
     Label lblChooseTopic = new Label("Choose Topic");
@@ -151,6 +168,10 @@ public class Main extends Application {
     gridpane.add(txtNumQuestions, 1, 1);
     gridpane.add(btnAddTopic, 2, 0);
     gridpane.add(btnRemoveTopic, 3, 0);
+    
+    vbox.getChildren().add(gridpane);
+    vbox.getChildren().add(lblTotalQuestions);
+    
   }
 
   public void setRight(BorderPane root) {
@@ -158,7 +179,8 @@ public class Main extends Application {
     VBox vboxRight = new VBox(10); // create new VBox to store elements horizontally
     vboxRight.setId("VBox"); // set id to change CSS of VBox
     root.setRight(vboxRight); // add HBox to BorderPane left
-
+    
+    
     // add elements to topics VBox
     vboxRight.getChildren().add(listTopicsLabel);
     vboxRight.getChildren().add(listTopics);
@@ -190,7 +212,7 @@ public class Main extends Application {
 
           ObservableList<String> selectedTopics = FXCollections.observableArrayList();
           selectedTopics.addAll(listTopics.getItems());
-          
+
           // clear fields so the next time the user creates a quiz the fields are reset
           txtNumQuestions.clear();
           listTopics.getItems().clear();
@@ -199,7 +221,7 @@ public class Main extends Application {
           Quiz quizScene = new Quiz(this, questions, numQuestions, selectedTopics);
           quizScene.start(primaryStage);
 
-          
+
         } else { // prompt user to fill out fields
           popup.setLabel(
               "Please enter a positive number of questions and choose at least one topic");
@@ -256,12 +278,12 @@ public class Main extends Application {
       try {
         addQuestionScene.start(primaryStage);
       } catch (Exception e1) {
-    	  
+
       }
     });
-    
-    //TODO: add code that gives popup when no topics are there
-    
+
+    // TODO: add code that gives popup when no topics are there
+
   }
 
   private void getQuestionsLoadFile() {
@@ -269,10 +291,15 @@ public class Main extends Application {
     if (loadFileScene != null) {
       for (int i = 0; i < loadFileScene.getQuestions().size(); i++) {
         questions.add(loadFileScene.getQuestions().get(i));
+        
+        // add a topic to list if it is not in the list
+        if (!topics.contains(loadFileScene.getTopics().get(i))) {
+          topics.add(loadFileScene.getTopics().get(i));
+        }
       }
-      topics.addAll(loadFileScene.getTopics());
+      
     }
-    
+
   }
 
 
