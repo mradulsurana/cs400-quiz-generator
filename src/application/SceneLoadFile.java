@@ -203,7 +203,7 @@ public class SceneLoadFile extends Application {
 			File selectedFile = fileChooser.showOpenDialog(s); // show the file explorer
 			if(selectedFile != null) { // if file was selected...
 				
-				pathName.setText(" " + selectedFile.getPath() + " "); //get the path and display for user
+				pathName.setText(selectedFile.getPath()); //get the path and display for user
 				if(!middleBox.getChildren().contains(btnLoad)) { //if load button not on the screen already...
 					middleBox.getChildren().addAll(btnLoad); // add it to the screen for parsing
 				}
