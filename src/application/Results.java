@@ -47,20 +47,32 @@ public class Results extends Application{
   
   @Override
   public void start(Stage primaryStage) {
+    //setting the title
     primaryStage.setTitle("Results");
+    
+    //create root and scene
     BorderPane root = new BorderPane();
     Scene scene2 = new Scene(root,1400,86);
     scene2.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+    
+    //Vertical box will hold buttons for save and exit
     VBox v = new VBox(5);
+    
+    //Horizontal box will hold scoring information
     HBox h = new HBox(5);
+    
+    //Labels for how well the user did on quiz
     Label correct = new Label("Questions correct: "+this.getCorrect());
     Label incorrect = new Label("Questions incorrect: "+this.getIncorrect());
     Label percent = new Label("Percent: "+(int)(this.getPercent())*100+"%");
+    
+    //Button for making new quiz
     Button makeNew = new Button("Make new quiz");
     makeNew.setOnAction(e -> {
       this.mainScene.subStart(primaryStage);
     });
     
+    //Button for exiting
     Button exit = new Button("Exit");
     exit.setOnAction(e -> {
     	
@@ -85,12 +97,17 @@ public class Results extends Application{
 //    	Platform.exit();
     });
     
+    //putting labels in the vertical box
     v.getChildren().addAll(correct,incorrect,percent);
+    
+    //putting buttons into horizontal box
     h.getChildren().addAll(makeNew,exit);
+    
+    //setting the center and bottom panes of root
     root.setCenter(v);
     root.setBottom(h);
-    root.setAlignment(v,Pos.CENTER);
-    root.setAlignment(h, Pos.CENTER);
+    
+    //margins for vertical and horizontal box
     root.setMargin(v, new Insets(100));
     root.setMargin(h, new Insets(100));
 
