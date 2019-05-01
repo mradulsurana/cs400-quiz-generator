@@ -1,6 +1,8 @@
 
 package application;
 
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -16,8 +18,10 @@ public class Results extends Application{
   private int total;
   private int correct;
   private Main mainScene;
+  private ArrayList<Question> questions;
   
-  public Results(Main mainScene,int total, int correct) {
+  public Results(ArrayList<Question> questions,Main mainScene,int total, int correct) {
+    this.questions = questions;
     this.total = total;
     this.correct = correct;
     this.mainScene = mainScene;

@@ -220,7 +220,7 @@ public class Quiz extends Application {
          next.start(primaryStage);
        }
        else {
-         Results result = new Results(sceneMain,count,correct);
+         Results result = new Results(this.questions,sceneMain,count,correct);
          result.start(primaryStage);
        };
      });
