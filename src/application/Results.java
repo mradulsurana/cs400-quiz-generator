@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -46,7 +47,7 @@ public class Results extends Application{
   
   @Override
   public void start(Stage primaryStage) {
-    
+    primaryStage.setTitle("Results");
     BorderPane root = new BorderPane();
     Scene scene2 = new Scene(root,1400,86);
     scene2.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -54,7 +55,7 @@ public class Results extends Application{
     HBox h = new HBox(5);
     Label correct = new Label("Questions correct: "+this.getCorrect());
     Label incorrect = new Label("Questions incorrect: "+this.getIncorrect());
-    Label percent = new Label("Percent: "+this.getPercent());
+    Label percent = new Label("Percent: "+(int)(this.getPercent())*100+"%");
     Button makeNew = new Button("Make new quiz");
     makeNew.setOnAction(e -> {
       this.mainScene.subStart(primaryStage);
@@ -88,6 +89,8 @@ public class Results extends Application{
     h.getChildren().addAll(makeNew,exit);
     root.setCenter(v);
     root.setBottom(h);
+    root.setAlignment(v,Pos.CENTER);
+    root.setAlignment(h, Pos.CENTER);
     root.setMargin(v, new Insets(100));
     root.setMargin(h, new Insets(100));
 

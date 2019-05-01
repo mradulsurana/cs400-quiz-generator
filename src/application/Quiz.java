@@ -249,21 +249,16 @@ public class Quiz extends Application {
 @Override
 public void start(Stage primaryStage) {
   
-  primaryStage.setTitle("Test Question "+count);
+  primaryStage.setTitle("Question "+count+" out of "+this.max);
   
   this.setToggle();
-  
-    
+   
   this.buildTop(primaryStage);
-    
-  
-  
   this.buildBottom(primaryStage);
   this.buildCenter(primaryStage);
   
-  root.setPadding(new Insets(10));
+  root.setPadding(new Insets(30));
  
-  
   Scene scene1= new Scene(root, 1400, 864);
   scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
   primaryStage.setScene(scene1);
