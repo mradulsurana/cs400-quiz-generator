@@ -168,9 +168,8 @@ public class Quiz extends Application {
        //keep image quality
        i1.setSmooth(true);
        i1.setCache(true);
-       System.out.print(i1);
+    
      root.setTop(i1);
-     System.out.println("Build top");
      root.setAlignment(i1, Pos.CENTER);
      root.setMargin(i1, new Insets(50));
      }
@@ -263,15 +262,11 @@ public void start(Stage primaryStage) {
   this.buildCenter(primaryStage);
   
   root.setPadding(new Insets(10));
-   
-  //Image image = new Image("application/placeholder.png");
-  //ImageView i1 = new ImageView(image);
  
   
   Scene scene1= new Scene(root, 1400, 864);
   scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
   primaryStage.setScene(scene1);
-  System.out.println(this.currentQuestion.getImage());
   primaryStage.show();
   }
 
