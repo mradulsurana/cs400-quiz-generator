@@ -185,7 +185,7 @@ public class SceneLoadFile extends Application {
 
 		Label prompt = new Label("Please open and load a .json file"); // communicate with user
 		
-		Label pathName = new Label("                                               "); // file path of .json loaded
+		Label pathName = new Label("    ** No File Openned Yet **    "); // file path of .json loaded
 		pathName.setId("labelPathName"); // css id
 		// shows when no file is openned yet
 		pathName.setBackground(new Background(new BackgroundFill(Color.GHOSTWHITE, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -203,7 +203,7 @@ public class SceneLoadFile extends Application {
 			File selectedFile = fileChooser.showOpenDialog(s); // show the file explorer
 			if(selectedFile != null) { // if file was selected...
 				
-				pathName.setText(selectedFile.getPath()); //get the path and display for user
+				pathName.setText(" " + selectedFile.getPath() + " "); //get the path and display for user
 				if(!middleBox.getChildren().contains(btnLoad)) { //if load button not on the screen already...
 					middleBox.getChildren().addAll(btnLoad); // add it to the screen for parsing
 				}
