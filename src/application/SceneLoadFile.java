@@ -44,6 +44,10 @@ public class SceneLoadFile extends Application {
 	ArrayList<String> topicsStr; // string arr of topics
 	ObservableList<String> topics; // topics as observable list
 
+	/**
+	 * constructor to set all the initial values of the scene
+	 * @param mainScene
+	 */
 	public SceneLoadFile(Main mainScene) {
 		this.mainScene = mainScene;
 		primaryStage = null;
@@ -53,30 +57,48 @@ public class SceneLoadFile extends Application {
 		topics = FXCollections.observableArrayList();
 	}
 
+	/**
+	 * runs to show the load window to user
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
-		this.primaryStage = primaryStage;
-		primaryStage.setTitle("Load Quiz Data");
+		this.primaryStage = primaryStage; // primary stage to be passed to other classes
+		primaryStage.setTitle("Load Quiz Data"); // changes the title of window
 
-		Scene sceneLoad = new Scene(root, 1000, 800);
-		sceneLoad.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		Scene sceneLoad = new Scene(root, 1000, 800); // scene to display on stage
+		sceneLoad.getStylesheets().add(getClass().getResource("application.css").toExternalForm()); // style of app
 
-		buildMiddle();
-		buildBottom();
-		primaryStage.setScene(sceneLoad);
-		primaryStage.show();
+		buildMiddle(); // build the middle of the scene
+		buildBottom(); // build the bottom (back button) of the scene
+		primaryStage.setScene(sceneLoad); // puts scene on stage
+		primaryStage.show(); // shows the stage
 
 	}
 
+	/**
+	 * gets the questions parsed from the .json files
+	 * @return ArrayList<Question> of questions
+	 */
 	public ArrayList<Question> getQuestions() {
 		return questions;
 	}
 	
+	/**
+	 * gets all the different topics of the questions of the loaded .json files
+	 * @return ObservableList<String> of topics
+	 */
 	public ObservableList<String> getTopics() {
 		return topics;
 	}
 
+	/**
+	 * parses a .json file into an ObservableList of Question Objects
+	 * @param filePath to the .json to parse
+	 * @throws FileNotFoundException if the file was not found
+	 * @throws IOException if problem getting the file
+	 * @throws ParseException if problem parsing the file
+	 */
 	private void parseQuestions(String filePath) throws FileNotFoundException, IOException, ParseException {
 		Object obj = new JSONParser().parse(new FileReader(filePath)); // parses .json to an Object
 		JSONObject jo = (JSONObject) obj; //casts to JSONObject
@@ -113,15 +135,19 @@ public class SceneLoadFile extends Application {
 			if(!topics.contains(topic)) { // add the topic if not already a topic in the list of topics
 				topics.add(topic);
 			}
-			System.out.println("question: " + question.getQuestion());
-			System.out.println("topic: " + question.getTopic());
-			System.out.println("image: " + question.getImage());
-			System.out.println("all choices: " + question.getAllAns());
-			System.out.println("correct choices: " + question.getCorrectAns());
-			System.out.println();
+			//UNCOMMENT FOR TESTING
+//			System.out.println("question: " + question.getQuestion());
+//			System.out.println("topic: " + question.getTopic());
+//			System.out.println("image: " + question.getImage());
+//			System.out.println("all choices: " + question.getAllAns());
+//			System.out.println("correct choices: " + question.getCorrectAns());
+//			System.out.println();
 		}
 	}
 
+	/**
+	 * builds the middle of the GUI with an open button, and then a load button when a file has been loaded
+	 */
 	private void buildMiddle() {
 		root.setCenter(null); // resets the root (for recursive calls if want to load another file)
 		VBox middleBox = new VBox(30); // holds middle contents
@@ -173,6 +199,9 @@ public class SceneLoadFile extends Application {
 
 	}
 
+	/**
+	 * builds the bottom of the GUI (back button)
+	 */
 	private void buildBottom() {
 
 		// display the back button to go back to the main home screen
