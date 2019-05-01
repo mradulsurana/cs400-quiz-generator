@@ -2,6 +2,8 @@ package application;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -9,46 +11,17 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 public class CustomPopup {
-  private Popup popup = new Popup();
-  private Label popupLabel = new Label();
+  private Alert popup;
   
   public CustomPopup() {
-    setUp();
+	  popup = new Alert(AlertType.INFORMATION);
   }
 
-  public static void main(String[] args) {
- 
-  }
-  
   public void show(Stage primaryStage) {
-    popup.show(primaryStage);
+    popup.show();
   }
   
   public void setLabel(String label) {
-    popupLabel.setText(label);
-  }
-  
-  public void setUp() {
-    
-    VBox vbox = new VBox(); // create vbox to hold
-    vbox.setId("popup");
-
-    Button btnClose = new Button("Ok");
-    popupLabel.setMinWidth(120);
-    popupLabel.setMinHeight(200);
-    
-    // popup.getContent().add(btnClose);
-    popup.getContent().add(vbox);
-    vbox.getChildren().add(popupLabel);
-    vbox.getChildren().add(btnClose);
-    btnClose.setOnAction(f -> popup.hide());
-
-    popupLabel.setStyle("-fx-padding: 0 20 0 20;");
-    vbox.setAlignment(Pos.CENTER);
-    VBox.setMargin(btnClose, new Insets(20));
-    
-    popupLabel.setId("popupLabel");
-    
-    
+	  popup.setHeaderText(label);
   }
 }
