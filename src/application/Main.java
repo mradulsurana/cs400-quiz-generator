@@ -37,7 +37,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.TextAlignment;
 
 
 /**
@@ -51,9 +50,10 @@ import javafx.scene.text.TextAlignment;
  */
 public class Main extends Application {
 
-  ObservableList<String> topics = FXCollections.observableArrayList();
-  ArrayList<Question> questions = new ArrayList<Question>();
-  Scene scene;
+  private ObservableList<String> topics = FXCollections.observableArrayList();
+  private ArrayList<Question> questions = new ArrayList<Question>();
+  private Scene scene;
+  private BorderPane root = new BorderPane();
   private SceneLoadFile loadFileScene;
   private SceneAddQuestion addQuestionScene;
 
@@ -89,8 +89,7 @@ public class Main extends Application {
 
     try {
       // create main scene using BorderPane
-      BorderPane root = new BorderPane();
-      createMainScene(root, primaryStage, topics);
+      createMainScene(primaryStage, topics);
 
     } catch (Exception e) {
       // catch any unknown exceptions
@@ -114,7 +113,7 @@ public class Main extends Application {
 
   }
 
-  private void createMainScene(BorderPane root, Stage primaryStage, ObservableList<String> topics) {
+  private void createMainScene(Stage primaryStage, ObservableList<String> topics) {
 
     primaryStage.setTitle("Quiz Generator"); // set Title of Application
 
@@ -129,12 +128,11 @@ public class Main extends Application {
     primaryStage.setScene(scene); // set primary state and show stage
     primaryStage.show();
 
-
     // set all elements of BorderPane layout
-    setTop(root);
-    setLeft(root);
-    setRight(root);
-    setBottom(root);
+    buildTop();
+    buildLeft();
+    buildRight();
+    buildBottom();
     handleEvents(primaryStage);
 
 
@@ -153,13 +151,13 @@ public class Main extends Application {
     launch(args);
   }
 
-  public void setTop(BorderPane root) {
+  public void buildTop() {
     // set location of elements on the page
     root.setTop(lblWelcome);
     lblWelcome.setId("welcome");
   }
 
-  public void setLeft(BorderPane root) {
+  public void buildLeft() {
 
     // create layout box to hold other elements
     VBox vbox = new VBox(80);
@@ -196,7 +194,7 @@ public class Main extends Application {
 
   }
 
-  public void setRight(BorderPane root) {
+  public void buildRight() {
 
     VBox vboxRight = new VBox(10); // create new VBox to store elements horizontally
     vboxRight.setId("VBox"); // set id to change CSS of VBox
@@ -210,7 +208,7 @@ public class Main extends Application {
 
   }
 
-  public void setBottom(BorderPane root) {
+  public void buildBottom() {
 
 
     HBox hbox = new HBox(10); // create new HBox to store elements horizontally
@@ -303,6 +301,16 @@ public class Main extends Application {
 
       }
     });
+
+    dropdownTopics.showingProperty().addListener((obs, wasShowing, isNowShowing) -> {
+      if (isNowShowing && questions.size() == 0) {
+        popup.setLabel("Please load or add questions to select a topic");
+        popup.show(primaryStage);
+      } else {
+        // choice box popup is now hidden
+      }
+    });
+
 
     // TODO: add code that gives popup when no topics are there
 
