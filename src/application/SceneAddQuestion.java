@@ -91,13 +91,14 @@ public class SceneAddQuestion extends Application implements Builder {
 	Button add = new Button("Add"); // buttons
 	Button back = new Button("Back");
 	Button loadImageFile = new Button("Load Image");
+	Button resetBox = new Button("Reset Drop Down Box");
 
 	ComboBox<String> topicComboBox;
 
 	GridPane grid = new GridPane(); // to be put on the root border pane
 	GridPane grid2 = new GridPane();
 
-	HBox bottomButtons = new HBox(2);
+	HBox bottomButtons = new HBox(3);
 
 	// needs to take in parameter for topic list
 	public SceneAddQuestion(Main main, ObservableList<String> allTopics) {
@@ -130,6 +131,9 @@ public class SceneAddQuestion extends Application implements Builder {
 		loadImageFile.setOnAction(ee -> {
 			loadImage(); // calls a method to load the image file into the image text field
 		});
+		
+		// reset combo box to null
+		resetBox.setOnAction(eeee -> topicComboBox.setValue(null));
 
 		// event handler for add button
 		add.setOnAction(eee -> {
@@ -300,7 +304,7 @@ public class SceneAddQuestion extends Application implements Builder {
 	}
 
 	/**
-	 * method to clear all text fields 
+	 * method to clear all text fields and buttons
 	 */
 	private void clearFields() {
 		textField.setText("");
@@ -311,6 +315,12 @@ public class SceneAddQuestion extends Application implements Builder {
 		choiceThree.setText("");
 		choiceFour.setText("");
 		choiceFive.setText("");
+		topicComboBox.setValue(null);
+		choice1.setSelected(false);
+		choice2.setSelected(false);
+		choice3.setSelected(false);
+		choice4.setSelected(false);
+		choice5.setSelected(false);
 	}
 
 	/**
@@ -383,7 +393,7 @@ public class SceneAddQuestion extends Application implements Builder {
 	@Override
 	public void buildBottom() {
 		// buttons are added to an Hbox
-		bottomButtons.getChildren().addAll(back, add);
+		bottomButtons.getChildren().addAll(back, add, resetBox);
 		bottomButtons.setAlignment(Pos.CENTER);
 		bottomButtons.setSpacing(200);
 
