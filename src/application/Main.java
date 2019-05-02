@@ -24,7 +24,7 @@ import javafx.scene.text.TextAlignment;
  * This class is the main driver application for the entire program and holds the GUI elements for
  * the main page. The application allows users to load questions from a JSON file, create new
  * questions from the applications itself, take a quiz based on loaded or created questions (user
- * can select topics and number of questions), and save 
+ * can select topics and number of questions), and save
  * 
  * @author Mradul Surana,
  *
@@ -86,9 +86,9 @@ public class Main extends Application {
     addQuestionScene = null; // set this to null so it cannot be called again
 
     Collections.sort(topics); // sort topics alphabetically since new topics may have been added
-    
+
     lblTotalQuestions.setText("Number of Questions in Question Database: " + questions.size());
-        
+
     primaryStage.setScene(scene);
     primaryStage.show();
 
@@ -170,10 +170,10 @@ public class Main extends Application {
     gridpane.add(txtNumQuestions, 1, 1);
     gridpane.add(btnAddTopic, 2, 0);
     gridpane.add(btnRemoveTopic, 3, 0);
-    
+
     vbox.getChildren().add(gridpane);
     vbox.getChildren().add(lblTotalQuestions);
-    
+
   }
 
   public void setRight(BorderPane root) {
@@ -181,8 +181,8 @@ public class Main extends Application {
     VBox vboxRight = new VBox(10); // create new VBox to store elements horizontally
     vboxRight.setId("VBox"); // set id to change CSS of VBox
     root.setRight(vboxRight); // add HBox to BorderPane left
-    
-    
+
+
     // add elements to topics VBox
     vboxRight.getChildren().add(listTopicsLabel);
     vboxRight.getChildren().add(listTopics);
@@ -294,38 +294,43 @@ public class Main extends Application {
       ObservableList<String> newTopics = loadFileScene.getTopics();
       ArrayList<Question> newQuestions = loadFileScene.getQuestions();
       
-      for (int i = 0; i < loadFileScene.getQuestions().size(); i++) {
-        questions.add(newQuestions.get(i)); // duplicate questions can be added to questions list 
-      }
-      
-      for (int i = 0; i < newTopics.size(); i++) {
+      if (newTopics != null && newQuestions != null) {
+        for (int i = 0; i < newQuestions.size(); i++) {
+          questions.add(newQuestions.get(i)); // duplicate questions can be added to questions list
+        }
 
-        // add a topic to list if it is not in the list
-        if (!topics.contains(newTopics.get(i))) {
-          topics.add(newTopics.get(i));
+        for (int i = 0; i < newTopics.size(); i++) {
+
+          // add a topic to list if it is not in the list
+          if (!topics.contains(newTopics.get(i))) {
+            topics.add(newTopics.get(i));
+          }
         }
       }
-      
-      
+
+
+
     }
-    
+
     if (addQuestionScene != null) {
       ObservableList<String> newTopics = addQuestionScene.getTopics();
       ArrayList<Question> newQuestions = addQuestionScene.getQuestions();
       
-      for (int i = 0; i < loadFileScene.getQuestions().size(); i++) {
-        questions.add(newQuestions.get(i)); // duplicate questions can be added to questions list
-      }
-      
-      for (int i = 0; i < newTopics.size(); i++) {
+      if (newTopics != null && newQuestions != null) {
+        for (int i = 0; i < newQuestions.size(); i++) {
+          questions.add(newQuestions.get(i)); // duplicate questions can be added to questions list
+        }
 
-        // add a topic to list if it is not in the list
-        if (!topics.contains(newTopics.get(i))) {
-          topics.add(newTopics.get(i));
+        for (int i = 0; i < newTopics.size(); i++) {
+          // add a topic to list if it is not in the list
+          if (!topics.contains(newTopics.get(i))) {
+            topics.add(newTopics.get(i));
+          }
         }
       }
-      
-      
+
+
+
     }
 
   }
