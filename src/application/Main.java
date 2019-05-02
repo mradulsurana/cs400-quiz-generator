@@ -31,7 +31,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -43,13 +42,14 @@ import javafx.scene.layout.VBox;
  * This class is the main driver application for the entire program and holds the GUI elements for
  * the main page. The application allows users to load questions from a JSON file, create new
  * questions from the applications itself, take a quiz based on loaded or created questions (user
- * can select topics and number of questions), and save
+ * can select topics and number of questions), and save questions to a JSON file.
  * 
  * @author Alfred Holmbeck, Mradul Surana, Allen Chang, Michael Lyrek, Jordan Ingbretson
  *
  */
-public class Main extends Application {
+public class Main extends Application implements Builder {
 
+  // declare variables to hold topics, questions, and the scenes
   private ObservableList<String> topics = FXCollections.observableArrayList();
   private ArrayList<Question> questions = new ArrayList<Question>();
   private Scene scene;
@@ -83,6 +83,8 @@ public class Main extends Application {
 
   /**
    * This is the main start method. It creates the GUI.
+   * 
+   * @param primaryStage is the stage that will display the GUI
    */
   @Override
   public void start(Stage primaryStage) {
@@ -96,13 +98,21 @@ public class Main extends Application {
     }
   }
 
+  /**
+   * This is the sub start method. It resets and displays the main screen when the user comes back
+   * to it from another page. It also gets the questions and topics from the other pages if any were
+   * added.
+   * 
+   * @param primaryStage is the stage that will display the GUI
+   *
+   */
   public void subStart(Stage primaryStage) {
-    // questions = loadfileScene.getQuestions(); // arraylist of type Questions
-    // topics = .getTopics // observable list of type String
 
-    getQuestionsLoadFile(); // get new questions and topics
-    loadFileScene = null; // set this to null so it cannot be called again
-    addQuestionScene = null; // set this to null so it cannot be called again
+    getQuestionsLoadFile(); // get new questions and topics from other pages
+
+    // set this to null so the topics and questions will not duplicate
+    loadFileScene = null;
+    addQuestionScene = null;
 
     Collections.sort(topics); // sort topics alphabetically since new topics may have been added
 
@@ -113,19 +123,27 @@ public class Main extends Application {
 
   }
 
+  /**
+   * This is the sub start method. It resets and displays the main screen when the user comes back
+   * to it from another page. It also gets the questions and topics from the other pages if any were
+   * added.
+   * 
+   * @param primaryStage is the stage that will display the GUI
+   *
+   */
   private void createMainScene(Stage primaryStage, ObservableList<String> topics) {
 
     primaryStage.setTitle("Quiz Generator"); // set Title of Application
 
     scene = new Scene(root, 1400, 864); // set size of screen
 
-    // set minimum screen size, so user cannot size below the requirements before
+    // set minimum screen size, so user cannot size below the requirements
     primaryStage.setMinWidth(1400);
     primaryStage.setMinHeight(864);
 
     // get CSS
     scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-    primaryStage.setScene(scene); // set primary state and show stage
+    primaryStage.setScene(scene); // set primary stage and show stage
     primaryStage.show();
 
     // set all elements of BorderPane layout
@@ -133,37 +151,41 @@ public class Main extends Application {
     buildLeft();
     buildRight();
     buildBottom();
-    handleEvents(primaryStage);
-
-
-
-    /*
-     * // set the alignment of elements on the page BorderPane.setAlignment(gridpane,
-     * Pos.CENTER_LEFT); BorderPane.setAlignment(lblWelcome, Pos.CENTER);
-     * BorderPane.setAlignment(hbox, Pos.BOTTOM_CENTER);
-     */
-
-
+    handleEvents(primaryStage); // handle all events based on button clicks
 
   }
 
+  /**
+   * This is the main method that launches the application.
+   */
   public static void main(String[] args) {
     launch(args);
   }
 
+  /**
+   * This method builds the top of the borderpane layout, adding the welcome message to the GUI
+   *
+   */
+  @Override
   public void buildTop() {
-    // set location of elements on the page
+    // set welcome message on top of page
     root.setTop(lblWelcome);
-    lblWelcome.setId("welcome");
+    lblWelcome.setId("welcome"); // give id to set CSS
   }
 
+  /**
+   * This method builds the left of the borderpane layout, adding GUI elements to select topics and
+   * number of questions.
+   *
+   */
+  @Override
   public void buildLeft() {
 
     // create layout box to hold other elements
     VBox vbox = new VBox(80);
     GridPane gridpane = new GridPane();
-    gridpane.setHgap(10); // set padding between HBox elements
-    vbox.setId("leftVBox"); // give gridpane an id to apply CSS
+    gridpane.setHgap(10); // set padding between gridpane elements
+    vbox.setId("leftVBox"); // give vbox an id to apply CSS
     gridpane.setId("gridpane"); // give gridpane an id to apply CSS
 
     root.setLeft(vbox); // add gridpane to borderpane
@@ -172,13 +194,7 @@ public class Main extends Application {
     Label lblChooseTopic = new Label("Choose Topic");
     Label lblNumQuestions = new Label("Choose Number of Questions");
 
-
-    // alternative way to add sample topics to drop down
-    // dropdownTopics.getItems().addAll(topics);
     dropdownTopics.setPrefWidth(300); // set width of dropdown list of topics
-
-
-
     txtNumQuestions.setPrefWidth(100); // set width of textfield
 
     // place elements in gridpane
@@ -189,47 +205,74 @@ public class Main extends Application {
     gridpane.add(btnAddTopic, 2, 0);
     gridpane.add(btnRemoveTopic, 3, 0);
 
-    vbox.getChildren().add(gridpane);
+    vbox.getChildren().add(gridpane); // place gridpane in vbox
+    // place the label of the total number of questions in the vbox
     vbox.getChildren().add(lblTotalQuestions);
 
   }
 
+  /**
+   * This methods builds the right of the borderpane layout, adding GUI elements
+   *
+   */
+  @Override
   public void buildRight() {
 
-    VBox vboxRight = new VBox(10); // create new VBox to store elements horizontally
+    VBox vboxRight = new VBox(10); // create new VBox to store elements vertically
     vboxRight.setId("VBox"); // set id to change CSS of VBox
-    root.setRight(vboxRight); // add HBox to BorderPane left
+    root.setRight(vboxRight); // add VBox to BorderPane left
 
-
-    // add elements to topics VBox
-    vboxRight.getChildren().add(listTopicsLabel);
-    vboxRight.getChildren().add(listTopics);
+    // add elements to VBox
+    vboxRight.getChildren().add(listTopicsLabel); // label for selected topics
+    vboxRight.getChildren().add(listTopics); // list of selected topics
     listTopics.setMinHeight(600); // set minimum height of topics list
-
   }
 
+  /**
+   * This method builds the bottom of the borderpane layout, adding GUI element buttons for the user
+   * to go to different pages.
+   *
+   */
+  @Override
   public void buildBottom() {
-
 
     HBox hbox = new HBox(10); // create new HBox to store elements horizontally
     root.setBottom(hbox); // add HBox to BorderPane bottom
 
-    // add elements to HBox
+    // add buttons to HBox
     hbox.getChildren().add(btnStartQuiz);
     hbox.getChildren().add(btnLoad);
     hbox.getChildren().add(btnAddQuestions);
   }
 
+  /**
+   * This method builds the center of the page.
+   */
+  @Override
+  public void buildCenter() {
+    // there are currently no elements to add to the center of the page
+  }
+
+  /**
+   * This method handles all events of clicked buttons and dropdown. It can take users to other
+   * pages to add and load questions. It also handles incorrect form input for starting the quiz.
+   *
+   */
   public void handleEvents(Stage primaryStage) {
     // event handler to start quiz
     btnStartQuiz.setOnAction(e -> {
       // checks if the user typed in the number of questions and if the user selected topics
 
       try {
+        // get number of questions from the text field
         int numQuestions = Integer.parseInt(txtNumQuestions.getText());
+
+        // check that the textfield was not empty, that there are topics, and the number of
+        // questions is a positive number
         if (!txtNumQuestions.getText().equals("") && !listTopics.getItems().isEmpty()
             && (numQuestions > 0)) {
 
+          // create a list from the user selected topics
           ObservableList<String> selectedTopics = FXCollections.observableArrayList();
           selectedTopics.addAll(listTopics.getItems());
 
@@ -242,21 +285,18 @@ public class Main extends Application {
           quizScene.start(primaryStage);
 
 
-        } else { // prompt user to fill out fields
+        } else { // prompt user to fill out fields correctly
           popup.setLabel(
               "Please enter a positive number of questions and choose at least one topic");
           popup.show(primaryStage);
         }
 
       } catch (NumberFormatException f) {
-        // prompt user to fill out fields correctly
-        popup.setLabel("Please enter the number of questions");
+        // prompt user to fill out fields correctly if they enter a non integer
+        popup.setLabel("Please enter a positive number for the number of questions");
         popup.show(primaryStage);
       }
 
-
-      // pass: txtNumQuestions.getText() into method of questionScene to pass the number of
-      // questions
     });
 
     // add topic to the list of topics for the quiz
@@ -282,7 +322,7 @@ public class Main extends Application {
       listTopics.getItems().remove(dropdownTopics.getValue());
     });
 
-    // display load JSON screen
+    // display load JSON screen if load button is clicked
     btnLoad.setOnAction(e -> {
       loadFileScene = new SceneLoadFile(this);
       try {
@@ -292,7 +332,7 @@ public class Main extends Application {
       }
     });
 
-    // display load JSON screen
+    // display add question screen if add button is clicked
     btnAddQuestions.setOnAction(e -> {
       addQuestionScene = new SceneAddQuestion(this, topics);
       try {
@@ -302,26 +342,29 @@ public class Main extends Application {
       }
     });
 
+    // display notification message if user tries to select a topic when the dropdown list is empty
     dropdownTopics.showingProperty().addListener((obs, wasShowing, isNowShowing) -> {
       if (isNowShowing && topics.size() == 0) {
         popup.setLabel("Please load or add questions to select a topic");
         popup.show(primaryStage);
-      } else {
-        // choice box popup is now hidden
       }
     });
 
-
-    // TODO: add code that gives popup when no topics are there
-
   }
 
+  /**
+   * This method gets questions and topics from the load JSON and add questions pages
+   */
   private void getQuestionsLoadFile() {
-    // get the questions loaded from the JSON file
+
+    // get the questions and topics loaded from the JSON file
     if (loadFileScene != null) {
+
+      // pull lists for topics and questions
       ObservableList<String> newTopics = loadFileScene.getTopics();
       ArrayList<Question> newQuestions = loadFileScene.getQuestions();
 
+      // if the lists are not null
       if (newTopics != null && newQuestions != null) {
         for (int i = 0; i < newQuestions.size(); i++) {
           questions.add(newQuestions.get(i)); // duplicate questions can be added to questions list
@@ -335,15 +378,16 @@ public class Main extends Application {
           }
         }
       }
-
-
-
     }
 
+    // get the questions and topics added from the add question page
     if (addQuestionScene != null) {
+
+      // pull lists for topics and questions
       ObservableList<String> newTopics = addQuestionScene.getTopics();
       ArrayList<Question> newQuestions = addQuestionScene.getQuestions();
 
+      // if the lists are not null
       if (newTopics != null && newQuestions != null) {
         for (int i = 0; i < newQuestions.size(); i++) {
           questions.add(newQuestions.get(i)); // duplicate questions can be added to questions list
@@ -356,12 +400,8 @@ public class Main extends Application {
           }
         }
       }
-
-
-
     }
 
   }
-
 
 }
