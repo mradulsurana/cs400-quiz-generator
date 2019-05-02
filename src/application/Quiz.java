@@ -54,6 +54,8 @@ public class Quiz extends Application {
   private ImageView i1;
   //the current question
   private Question currentQuestion;
+  //stage
+  private Stage primaryStage;
   
   /**
    * Private constructor that will only be called within this class
@@ -140,7 +142,9 @@ public class Quiz extends Application {
     * put in scene
     * @param primaryStage is the Stage that quiz will show
     */
-   private void buildTop(Stage primaryStage) {
+   private void buildTop() {
+     
+     
      //check if the image exists
      if(this.currentQuestion.getImage() != null) {
        //create an imageview
@@ -168,7 +172,7 @@ public class Quiz extends Application {
     * be put in scene
     * @param primaryStage is stage of the Quiz
     */
-   private void buildBottom(Stage primaryStage) {
+   private void buildBottom() {
      //button for going to next question
      Button button= new Button("Next");
      button.setDisable(true);
@@ -197,12 +201,12 @@ public class Quiz extends Application {
                correct++;
                //tell user they got it correct
                popup.setLabel("Answer was correct!");
-               popup.show(primaryStage);
+               popup.show(this.primaryStage);
                break;
              } else {
                //tell user if they got answer incorrect
                popup.setLabel("Answer was incorrect!");
-               popup.show(primaryStage);
+               popup.show(this.primaryStage);
              }
            }
          }
@@ -235,7 +239,7 @@ public class Quiz extends Application {
     * This method builds the center layout which holds the question text
     * @param primaryStage is the stage of the program
     */
-   private void buildCenter(Stage primaryStage) {
+   private void buildCenter() {
      //label for question text
      Label labelQuestion = new Label(this.currentQuestion.getQuestion());
      //wrap text
@@ -249,10 +253,26 @@ public class Quiz extends Application {
    }
 
    /**
+    * Method for building left pane, since we don't have any info to display
+    * it is currently unused
+    */
+   private void buildLeft() {
+     
+   }
+   
+   /**
+    * Method for building the right pane, since we don't have any info to display
+    * it is currently unused
+    */
+   private void buildRight() {
+     
+   }
+   /**
     * This method builds the stage and displays it
     */
    @Override
    public void start(Stage primaryStage) {
+     this.primaryStage = primaryStage;
      //Set title to tell user which question they are on
      primaryStage.setTitle("Question "+count+" out of "+this.max);
   
@@ -260,16 +280,16 @@ public class Quiz extends Application {
      this.setToggle();
    
      //Build top, bottom, and center panes of the root
-     this.buildTop(primaryStage);
-     this.buildBottom(primaryStage);
-     this.buildCenter(primaryStage);
+     this.buildTop();
+     this.buildBottom();
+     this.buildCenter();
   
      root.setPadding(new Insets(30));
  
      //Create the scene
      Scene scene1= new Scene(root, 1400, 864);
      scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-     primaryStage.setScene(scene1);
-     primaryStage.show();
+     this.primaryStage.setScene(scene1);
+     this.primaryStage.show();
    }  
 }
