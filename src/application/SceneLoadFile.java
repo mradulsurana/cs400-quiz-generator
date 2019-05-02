@@ -63,7 +63,7 @@ import javafx.stage.Stage;
  * @author Alfred Holmbeck, Mradul Surana, Allen Chang, Michael Lyrek, Jordan Ingbretson
  *
  */
-public class SceneLoadFile extends Application {
+public class SceneLoadFile extends Application implements Builder {
 
 	Main mainScene; // instance to go back to when the files have been loaded
 	Stage primaryStage; // stage for displaying scenes
@@ -97,7 +97,7 @@ public class SceneLoadFile extends Application {
 		Scene sceneLoad = new Scene(root, 1000, 800); // scene to display on stage
 		sceneLoad.getStylesheets().add(getClass().getResource("application.css").toExternalForm()); // style of app
 
-		buildMiddle(); // build the middle of the scene
+		buildCenter(); // build the middle of the scene
 		buildBottom(); // build the bottom (back button) of the scene
 		primaryStage.setScene(sceneLoad); // puts scene on stage
 		primaryStage.show(); // shows the stage
@@ -175,14 +175,34 @@ public class SceneLoadFile extends Application {
 //		System.out.println(topics);
 	}
 
+
+	/**
+	 * builds the bottom of the GUI (back button)
+	 */
+	@Override
+	public void buildBottom() {
+		// display the back button to go back to the main home screen
+		HBox bottomBox = new HBox();
+		Button btnBack = new Button("Back");
+		bottomBox.getChildren().addAll(btnBack);
+		
+		btnBack.setOnAction(e -> { // if pressed, the user is done loading and can move on with making a quiz
+			mainScene.subStart(primaryStage);
+		});
+		
+		root.setBottom(bottomBox);
+		
+	}
+
 	/**
 	 * builds the middle of the GUI with an open button, and then a load button when a file has been loaded
 	 */
-	private void buildMiddle() {
+	@Override
+	public void buildCenter() {
 		root.setCenter(null); // resets the root (for recursive calls if want to load another file)
 		VBox middleBox = new VBox(30); // holds middle contents
 		middleBox.setId("VBox"); // css id
-
+		
 		Label prompt = new Label("Please open and load a .json file"); // communicate with user
 		
 		Label pathName = new Label("                                         ** No File Openned Yet **"); // file path of .json loaded
@@ -190,7 +210,7 @@ public class SceneLoadFile extends Application {
 		pathName.setId("labelPathName"); // css id
 		// shows when no file is openned yet
 		pathName.setBackground(new Background(new BackgroundFill(Color.GHOSTWHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-
+		
 		Button btnLoad = new Button("Load File"); // to load file (parsing .json)
 		Button btnOpen = new Button("Open File"); // to open a .json
 		middleBox.getChildren().addAll(prompt, pathName, btnOpen); // fills middle of screen
@@ -210,7 +230,7 @@ public class SceneLoadFile extends Application {
 				}
 			}
 		});
-
+		
 		btnLoad.setOnAction(e2 -> { // if load button pressed
 			try {
 				if (pathName.getText() != null) { // if a path was selected...
@@ -219,7 +239,7 @@ public class SceneLoadFile extends Application {
 					pop.setLabel("File loaded successfully and questions were added.");
 					pop.show(primaryStage);
 				}
-				buildMiddle(); // user can load another file if they so choose
+				buildCenter(); // user can load another file if they so choose
 				
 			} catch (Exception ex) { // parsing the file did not work
 				CustomPopup pop = new CustomPopup(); // tell the user and have them try again
@@ -227,23 +247,21 @@ public class SceneLoadFile extends Application {
 				pop.show(primaryStage);
 			}
 		});
-
+		
 	}
 
-	/**
-	 * builds the bottom of the GUI (back button)
-	 */
-	private void buildBottom() {
+	@Override
+	public void buildTop() {
+		// unused
+	}
 
-		// display the back button to go back to the main home screen
-		HBox bottomBox = new HBox();
-		Button btnBack = new Button("Back");
-		bottomBox.getChildren().addAll(btnBack);
+	@Override
+	public void buildLeft() {
+		// unused
+	}
 
-		btnBack.setOnAction(e -> { // if pressed, the user is done loading and can move on with making a quiz
-			mainScene.subStart(primaryStage);
-		});
-
-		root.setBottom(bottomBox);
+	@Override
+	public void buildRight() {
+		// unused
 	}
 }
