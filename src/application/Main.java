@@ -303,7 +303,7 @@ public class Main extends Application {
     });
 
     dropdownTopics.showingProperty().addListener((obs, wasShowing, isNowShowing) -> {
-      if (isNowShowing && questions.size() == 0) {
+      if (isNowShowing && topics.size() == 0) {
         popup.setLabel("Please load or add questions to select a topic");
         popup.show(primaryStage);
       } else {
