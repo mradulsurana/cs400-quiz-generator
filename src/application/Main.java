@@ -1,3 +1,23 @@
+//////////////////////////////// HEADER COMMENT //////////////////////////////
+//
+// Title: cs400-quiz-generator
+// Course: (CS 400 section 001, Spring, 2019)
+// Due: May 2nd by 10:00pm
+//
+// Author: (Alfred Holmbeck, Mradul Surana, Allen Chang, Michael Lyrek, Jordan Ingbretson)
+// Lecturer's Name: (Prof. KUEMMEL)
+//
+///////////////////////////// CREDIT OUTSIDE HELP /////////////////////////////
+//
+// Persons: (none)
+// Online Sources: (none)
+//
+////////////////////////// COMMENTS and|or KNOWN BUGS /////////////////////////
+//
+// (none)
+//
+///////////////////////////////////////////////////////////////////////////////
+
 package application;
 
 import java.util.ArrayList;
@@ -293,7 +313,7 @@ public class Main extends Application {
     if (loadFileScene != null) {
       ObservableList<String> newTopics = loadFileScene.getTopics();
       ArrayList<Question> newQuestions = loadFileScene.getQuestions();
-      
+
       if (newTopics != null && newQuestions != null) {
         for (int i = 0; i < newQuestions.size(); i++) {
           questions.add(newQuestions.get(i)); // duplicate questions can be added to questions list
@@ -315,7 +335,7 @@ public class Main extends Application {
     if (addQuestionScene != null) {
       ObservableList<String> newTopics = addQuestionScene.getTopics();
       ArrayList<Question> newQuestions = addQuestionScene.getQuestions();
-      
+
       if (newTopics != null && newQuestions != null) {
         for (int i = 0; i < newQuestions.size(); i++) {
           questions.add(newQuestions.get(i)); // duplicate questions can be added to questions list
