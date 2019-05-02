@@ -231,10 +231,10 @@ public class SceneAddQuestion extends Application {
 				if (correctAnswers.isEmpty() || bad) {
 					popup.setLabel("Please select correct answers that have an answer given");
 					popup.show(primaryStage);
-				} else if (!isNewTopic && topicChosen == null) {
+				} else if (!isNewTopic && (String) topicComboBox.getValue() == null) {
 					popup.setLabel("Please pick a topic or enter new topic");
 					popup.show(primaryStage);
-				} else if ((String) topicComboBox.getValue() != null) {
+				} else if ((String) topicComboBox.getValue() != null && isNewTopic) {
 					popup.setLabel("Please only pick a topic OR enter new topic");
 					popup.show(primaryStage);
 				} else if (questionText.equals("")) {
@@ -243,12 +243,14 @@ public class SceneAddQuestion extends Application {
 				} else if (answersEmpty) {
 					popup.setLabel("Please enter at least two answers");
 					popup.show(primaryStage);
+				} else if(topics.contains(topicChosen) && isNewTopic){
+					popup.setLabel("Topic already exsists, please select it from the drop down box");
+					popup.show(primaryStage);
 				} else {
-
 					if (isNewTopic) {
 						newTopics.add(topicChosen);
 						topics.add(topicChosen);
-					}
+						}
 
 					Question newQuestion = new Question(questionText);
 					for (int k = 0; k < correctAnswers.size(); ++k)
