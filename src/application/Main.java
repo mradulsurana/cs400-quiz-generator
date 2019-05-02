@@ -46,7 +46,7 @@ import javafx.scene.text.TextAlignment;
  * questions from the applications itself, take a quiz based on loaded or created questions (user
  * can select topics and number of questions), and save
  * 
- * @author Mradul Surana,
+ * @author Alfred Holmbeck, Mradul Surana, Allen Chang, Michael Lyrek, Jordan Ingbretson
  *
  */
 public class Main extends Application {
