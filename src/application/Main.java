@@ -35,6 +35,7 @@ public class Main extends Application {
   ArrayList<Question> questions = new ArrayList<Question>();
   Scene scene;
   private SceneLoadFile loadFileScene;
+  private SceneAddQuestion addQuestionScene;
 
   // create buttons
   private Button btnStartQuiz = new Button("Start Quiz");
@@ -82,6 +83,7 @@ public class Main extends Application {
 
     getQuestionsLoadFile(); // get new questions and topics
     loadFileScene = null; // set this to null so it cannot be called again
+    addQuestionScene = null; // set this to null so it cannot be called again
 
     Collections.sort(topics); // sort topics alphabetically since new topics may have been added
     
@@ -274,7 +276,7 @@ public class Main extends Application {
 
     // display load JSON screen
     btnAddQuestions.setOnAction(e -> {
-      SceneAddQuestion addQuestionScene = new SceneAddQuestion(this, topics);
+      addQuestionScene = new SceneAddQuestion(this, topics);
       try {
         addQuestionScene.start(primaryStage);
       } catch (Exception e1) {
@@ -289,14 +291,40 @@ public class Main extends Application {
   private void getQuestionsLoadFile() {
     // get the questions loaded from the JSON file
     if (loadFileScene != null) {
+      ObservableList<String> newTopics = loadFileScene.getTopics();
+      ArrayList<Question> newQuestions = loadFileScene.getQuestions();
+      
       for (int i = 0; i < loadFileScene.getQuestions().size(); i++) {
+        questions.add(newQuestions.get(i)); // duplicate questions can be added to questions list 
+      }
+      
+      for (int i = 0; i < newTopics.size(); i++) {
         questions.add(loadFileScene.getQuestions().get(i));
-        
         // add a topic to list if it is not in the list
-        if (!topics.contains(loadFileScene.getTopics().get(i))) {
-          topics.add(loadFileScene.getTopics().get(i));
+        if (!topics.contains(newTopics.get(i))) {
+          topics.add(newTopics.get(i));
         }
       }
+      
+      
+    }
+    
+    if (addQuestionScene != null) {
+      ObservableList<String> newTopics = addQuestionScene.getTopics();
+      ArrayList<Question> newQuestions = addQuestionScene.getQuestions();
+      
+      for (int i = 0; i < loadFileScene.getQuestions().size(); i++) {
+        questions.add(newQuestions.get(i)); // duplicate questions can be added to questions list
+      }
+      
+      for (int i = 0; i < newTopics.size(); i++) {
+        questions.add(loadFileScene.getQuestions().get(i));
+        // add a topic to list if it is not in the list
+        if (!topics.contains(newTopics.get(i))) {
+          topics.add(newTopics.get(i));
+        }
+      }
+      
       
     }
 

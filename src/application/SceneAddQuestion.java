@@ -247,6 +247,7 @@ public class SceneAddQuestion extends Application {
 
 					if (isNewTopic) {
 						newTopics.add(topicChosen);
+						topics.add(topicChosen);
 					}
 
 					Question newQuestion = new Question(questionText);
@@ -283,7 +284,7 @@ public class SceneAddQuestion extends Application {
 
 	}
 
-	private ObservableList<String> getTopics() {
+	public ObservableList<String> getTopics() {
 		return newTopics;
 	}
 
