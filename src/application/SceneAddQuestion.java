@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -26,12 +27,47 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
 
-public class SceneAddQuestion extends Application {
-	Main mainClass;
-	Scene scene1;
-	ObservableList<String> topics;
-	ArrayList<Question> allQuestions = new ArrayList<>();
-	ObservableList<String> newTopics = FXCollections.observableArrayList();
+public class SceneAddQuestion extends Application implements Builder {
+	private Main mainClass;
+	private Scene scene1;
+	private ObservableList<String> topics;
+	private ArrayList<Question> allQuestions = new ArrayList<>();
+	private ObservableList<String> newTopics = FXCollections.observableArrayList();
+	ArrayList<String> correctAnswers = new ArrayList<String>();
+
+	private BorderPane root = new BorderPane();
+	Label text = new Label("Text");
+	Label topic = new Label("Topic");
+	Label addTopic = new Label("If question is being added to new topic");
+	Label image = new Label("Image");
+	Label choice = new Label("Options");
+	Label correct = new Label("Correct");
+
+	RadioButton choice1 = new RadioButton("A");
+	RadioButton choice2 = new RadioButton("B");
+	RadioButton choice3 = new RadioButton("C");
+	RadioButton choice4 = new RadioButton("D");
+	RadioButton choice5 = new RadioButton("E");
+
+	TextField textField = new TextField();
+	TextField imageFile = new TextField();
+	TextField topicField = new TextField();
+	TextField choiceOne = new TextField();
+	TextField choiceTwo = new TextField();
+	TextField choiceThree = new TextField();
+	TextField choiceFour = new TextField();
+	TextField choiceFive = new TextField();
+
+	Button add = new Button("Add");
+	Button back = new Button("Back");
+	Button loadImageFile = new Button("Load Image");
+
+	ComboBox<String> topicComboBox;
+
+	GridPane grid = new GridPane();
+	GridPane grid2 = new GridPane();
+
+	HBox bottomButtons = new HBox(2);
 
 	// needs to take in parameter for topic list
 	public SceneAddQuestion(Main main, ObservableList<String> allTopics) {
@@ -41,114 +77,19 @@ public class SceneAddQuestion extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		BorderPane root = new BorderPane();
 
 		primaryStage.setTitle("Add Question");
 
-		Label text = new Label("Text");
-		Label topic = new Label("Topic");
-		Label addTopic = new Label("If question is being added to new topic");
-		Label image = new Label("Image");
-		Label choice = new Label("Options");
-		Label correct = new Label("Correct");
+		topicComboBox = new ComboBox<String>(topics);
 
-		RadioButton choice1, choice2, choice3, choice4, choice5;
-		choice1 = new RadioButton("A");
-		choice2 = new RadioButton("B");
-		choice3 = new RadioButton("C");
-		choice4 = new RadioButton("D");
-		choice5 = new RadioButton("E");
+		setup();
 
-		TextField textField = new TextField();
-		TextField imageFile = new TextField();
-		TextField topicField = new TextField();
-		TextField choiceOne, choiceTwo, choiceThree, choiceFour, choiceFive;
-		choiceOne = new TextField();
-		choiceTwo = new TextField();
-		choiceThree = new TextField();
-		choiceFour = new TextField();
-		choiceFive = new TextField();
-		choiceOne.setPrefWidth(800);
-
-		textField.setPromptText("Enter Question Here");
-		imageFile.setPromptText("Enter Image File Here");
-		topicField.setPromptText("Enter new topic here");
-		choiceOne.setPromptText("Option One");
-		choiceTwo.setPromptText("Option Two");
-		choiceThree.setPromptText("Option Three");
-		choiceFour.setPromptText("Option Four");
-		choiceFive.setPromptText("Option Five");
-
-		Button add = new Button("Add");
-		Button back = new Button("Back");
-		Button loadImageFile = new Button("Load Image");
-		add.setDisable(true);
-
-		choice1.setOnAction(e -> add.setDisable(false));
-		choice2.setOnAction(e -> add.setDisable(false));
-		choice3.setOnAction(e -> add.setDisable(false));
-		choice4.setOnAction(e -> add.setDisable(false));
-		choice5.setOnAction(e -> add.setDisable(false));
-
-		ComboBox<String> topicComboBox = new ComboBox<String>(topics);
-
-		GridPane grid = new GridPane();
-
-		grid.add(text, 0, 0, 1, 1);
-		grid.add(topic, 0, 1, 1, 1);
-		grid.add(image, 0, 2, 1, 1);
-
-		grid.add(textField, 1, 0, 1, 1);
-		grid.add(topicComboBox, 1, 1, 1, 1);
-		grid.add(imageFile, 1, 2, 1, 1);
-
-		grid.add(addTopic, 2, 0, 1, 1);
-		grid.add(topicField, 2, 1, 1, 1);
-		grid.add(loadImageFile, 2, 2, 1, 1);
-
-		GridPane grid2 = new GridPane();
-
-		grid2.add(choice, 0, 1, 1, 1);
-		grid2.add(choiceOne, 0, 2, 1, 1);
-		grid2.add(choiceTwo, 0, 3, 1, 1);
-		grid2.add(choiceThree, 0, 4, 1, 1);
-		grid2.add(choiceFour, 0, 5, 1, 1);
-		grid2.add(choiceFive, 0, 6, 1, 1);
-
-		grid2.add(correct, 1, 1, 1, 1);
-		grid2.add(choice1, 1, 2, 1, 1);
-		grid2.add(choice2, 1, 3, 1, 1);
-		grid2.add(choice3, 1, 4, 1, 1);
-		grid2.add(choice4, 1, 5, 1, 1);
-		grid2.add(choice5, 1, 6, 1, 1);
-
-		HBox bottomButtons = new HBox(2);
-		bottomButtons.getChildren().addAll(back, add);
-		bottomButtons.setAlignment(Pos.CENTER);
-		bottomButtons.setSpacing(200);
-
-		grid.setVgap(30);
-		grid.setHgap(200);
-		grid.setAlignment(Pos.CENTER);
-
-		grid2.setVgap(30);
-		grid2.setHgap(200);
-		grid2.setAlignment(Pos.CENTER);
-
-		root.setCenter(grid2);
-		root.setTop(grid);
-		root.setBottom(bottomButtons);
+		buildCenter();
+		buildTop();
+		buildBottom();
 
 		loadImageFile.setOnAction(ee -> {
-			Stage s = new Stage(); // stage for file explorer
-			FileChooser fileChooser = new FileChooser(); // to find file
-			fileChooser.setTitle("Select a .json file"); // name of window
-			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("PNG File", "*.png"),
-					new ExtensionFilter("JPEG File", "*.jpeg")); // only can select .json
-																	// files
-			File selectedFile = fileChooser.showOpenDialog(s); // show the file explorer
-			if (selectedFile != null)
-				imageFile.setText(selectedFile.getPath()); // get the path and display for user
+			loadImage();
 		});
 
 		add.setOnAction(eee -> {
@@ -173,15 +114,15 @@ public class SceneAddQuestion extends Application {
 
 				ArrayList<String> answers = new ArrayList<String>();
 				if (!choiceOne.getText().equals(""))
-				answers.add(choiceOne.getText());
+					answers.add(choiceOne.getText());
 				if (!choiceTwo.getText().equals(""))
-				answers.add(choiceTwo.getText());
+					answers.add(choiceTwo.getText());
 				if (!choiceThree.getText().equals(""))
-				answers.add(choiceThree.getText());
+					answers.add(choiceThree.getText());
 				if (!choiceFour.getText().equals(""))
-				answers.add(choiceFour.getText());
+					answers.add(choiceFour.getText());
 				if (!choiceFive.getText().equals(""))
-				answers.add(choiceFive.getText());
+					answers.add(choiceFive.getText());
 
 				boolean answersEmpty = true;
 				int j = 0;
@@ -193,48 +134,39 @@ public class SceneAddQuestion extends Application {
 
 				if (j >= 2)
 					answersEmpty = false;
-				
-				
-
-				ArrayList<String> correctAnswers = new ArrayList<String>();
 
 				boolean bad = false;
 
-				if (choice1.isSelected()) {
+				if (choice1.isSelected())
 					if (!choiceOne.getText().equals(""))
 						correctAnswers.add(choiceOne.getText());
 					else {
 						bad = true;
 					}
-				}
-				if (choice2.isSelected()) {
+				if (choice2.isSelected())
 					if (!choiceTwo.getText().equals(""))
 						correctAnswers.add(choiceTwo.getText());
 					else {
 						bad = true;
 					}
-				}
-				if (choice3.isSelected()) {
+				if (choice3.isSelected())
 					if (!choiceThree.getText().equals(""))
 						correctAnswers.add(choiceThree.getText());
 					else {
 						bad = true;
 					}
-				}
-				if (choice4.isSelected()) {
+				if (choice4.isSelected())
 					if (!choiceFour.getText().equals(""))
 						correctAnswers.add(choiceFour.getText());
 					else {
 						bad = true;
 					}
-				}
-				if (choice5.isSelected()) {
+				if (choice5.isSelected())
 					if (!choiceFive.getText().equals(""))
 						correctAnswers.add(choiceFive.getText());
 					else {
 						bad = true;
 					}
-				}
 
 				if (correctAnswers.isEmpty() || bad) {
 					popup.setLabel("Please select correct answers that have an answer given");
@@ -251,39 +183,39 @@ public class SceneAddQuestion extends Application {
 				} else if (answersEmpty) {
 					popup.setLabel("Please enter at least two answers");
 					popup.show(primaryStage);
-				} else if(topics.contains(topicChosen) && isNewTopic){
+				} else if (topics.contains(topicChosen) && isNewTopic) {
 					popup.setLabel("Topic already exsists, please select it from the drop down box");
 					popup.show(primaryStage);
 				} else {
 					if (isNewTopic) {
 						newTopics.add(topicChosen);
 						topics.add(topicChosen);
-						}
+						Collections.sort(topics);
+						Collections.sort(newTopics);
+					}
 
 					Question newQuestion = new Question(questionText);
+					
 					for (int k = 0; k < correctAnswers.size(); ++k)
 						newQuestion.setCorrectAns(correctAnswers.get(k));
+					
 					for (int l = 0; l < answers.size(); ++l)
 						newQuestion.setAllAns(answers.get(l));
+					
 					newQuestion.setTopic(topicChosen);
+					
 					if (!imageFile.getText().equals(""))
 						newQuestion.setImage(imageView);
 
 					allQuestions.add(newQuestion);
+					
 					if (allQuestions.contains(newQuestion)) {
 						popup.setLabel("Question was added, press back to return home, or add a new question");
 						popup.show(primaryStage);
 					}
-					
-					textField.setText("");
-					imageFile.setText("");
-					topicField.setText("");
-					choiceOne.setText("");
-					choiceTwo.setText("");
-					choiceThree.setText("");
-					choiceFour.setText("");
-					choiceFive.setText("");
-					
+
+					clearFields();
+
 				}
 
 			} catch (MalformedURLException e1) {
@@ -302,6 +234,118 @@ public class SceneAddQuestion extends Application {
 		scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		primaryStage.show();
 
+	}
+
+	private void clearFields() {
+		textField.setText("");
+		imageFile.setText("");
+		topicField.setText("");
+		choiceOne.setText("");
+		choiceTwo.setText("");
+		choiceThree.setText("");
+		choiceFour.setText("");
+		choiceFive.setText("");
+	}
+
+	@Override
+	public void buildTop() {
+		grid.add(text, 0, 0, 1, 1);
+		grid.add(topic, 0, 1, 1, 1);
+		grid.add(image, 0, 2, 1, 1);
+
+		grid.add(textField, 1, 0, 1, 1);
+		grid.add(topicComboBox, 1, 1, 1, 1);
+		grid.add(imageFile, 1, 2, 1, 1);
+
+		grid.add(addTopic, 2, 0, 1, 1);
+		grid.add(topicField, 2, 1, 1, 1);
+		grid.add(loadImageFile, 2, 2, 1, 1);
+
+		grid.setVgap(30);
+		grid.setHgap(200);
+		grid.setAlignment(Pos.CENTER);
+
+		root.setTop(grid);
+
+	}
+
+	@Override
+	public void buildCenter() {
+		grid2.add(choice, 0, 1, 1, 1);
+		grid2.add(choiceOne, 0, 2, 1, 1);
+		grid2.add(choiceTwo, 0, 3, 1, 1);
+		grid2.add(choiceThree, 0, 4, 1, 1);
+		grid2.add(choiceFour, 0, 5, 1, 1);
+		grid2.add(choiceFive, 0, 6, 1, 1);
+
+		grid2.add(correct, 1, 1, 1, 1);
+		grid2.add(choice1, 1, 2, 1, 1);
+		grid2.add(choice2, 1, 3, 1, 1);
+		grid2.add(choice3, 1, 4, 1, 1);
+		grid2.add(choice4, 1, 5, 1, 1);
+		grid2.add(choice5, 1, 6, 1, 1);
+
+		grid2.setVgap(30);
+		grid2.setHgap(200);
+		grid2.setAlignment(Pos.CENTER);
+
+		root.setCenter(grid2);
+
+	}
+
+	@Override
+	public void buildBottom() {
+		bottomButtons.getChildren().addAll(back, add);
+		bottomButtons.setAlignment(Pos.CENTER);
+		bottomButtons.setSpacing(200);
+
+		root.setBottom(bottomButtons);
+
+	}
+
+	@Override
+	public void buildLeft() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void buildRight() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setup() {
+		choiceOne.setPrefWidth(800);
+
+		textField.setPromptText("Enter Question Here");
+		imageFile.setPromptText("Enter Image File Here");
+		topicField.setPromptText("Enter new topic here");
+		choiceOne.setPromptText("Option One");
+		choiceTwo.setPromptText("Option Two");
+		choiceThree.setPromptText("Option Three");
+		choiceFour.setPromptText("Option Four");
+		choiceFive.setPromptText("Option Five");
+
+		add.setDisable(true);
+
+		choice1.setOnAction(e -> add.setDisable(false));
+		choice2.setOnAction(e -> add.setDisable(false));
+		choice3.setOnAction(e -> add.setDisable(false));
+		choice4.setOnAction(e -> add.setDisable(false));
+		choice5.setOnAction(e -> add.setDisable(false));
+	}
+
+	private void loadImage() {
+		Stage s = new Stage(); // stage for file explorer
+		FileChooser fileChooser = new FileChooser(); // to find file
+		fileChooser.setTitle("Select a .json file"); // name of window
+		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("PNG File", "*.png"),
+				new ExtensionFilter("JPEG File", "*.jpeg")); // only can select .json
+																// files
+		File selectedFile = fileChooser.showOpenDialog(s); // show the file explorer
+		if (selectedFile != null)
+			imageFile.setText(selectedFile.getPath()); // get the path and display for user
 	}
 
 	public ObservableList<String> getTopics() {
