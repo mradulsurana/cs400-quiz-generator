@@ -30,7 +30,7 @@ import javafx.stage.Stage;
  * amount of Questions and filtered by topic and 
  * allows the user to answer them. It keeps track
  * of how many questions were answered correctly
- * @author allen
+ * @author Allen, Michael, Jordan, Noah, Mradul
  *
  */
 public class Quiz extends Application {
@@ -134,23 +134,6 @@ public class Quiz extends Application {
     }
   }
   
-  /**
-   * This method formats the question image
-   * @param imageFile is the image to be formated
-   */
-   private void createImage() {
-  //create image 
-  
-    
-    //set size of image
-    i1.setFitWidth(400);
-    //maintain ratio of image
-    i1.setPreserveRatio(true);
-    //keep image quality
-    i1.setSmooth(true);
-    i1.setCache(true);
-    
-  }
    
    /**
     * This method sets the top pane of the root that will be
@@ -158,7 +141,9 @@ public class Quiz extends Application {
     * @param primaryStage is the Stage that quiz will show
     */
    private void buildTop(Stage primaryStage) {
+     //check if the image exists
      if(this.currentQuestion.getImage() != null) {
+       //create an imageview
        ImageView i1 = new ImageView();
        i1 = this.currentQuestion.getImage();
      //set size of image
@@ -168,10 +153,13 @@ public class Quiz extends Application {
        //keep image quality
        i1.setSmooth(true);
        i1.setCache(true);
-    
-     root.setTop(i1);
-     root.setAlignment(i1, Pos.CENTER);
-     root.setMargin(i1, new Insets(50));
+       
+       //put image in top pane
+       root.setTop(i1);
+       
+       //center the image and margins
+       root.setAlignment(i1, Pos.CENTER);
+       root.setMargin(i1, new Insets(50));
      }
    }
    
@@ -197,75 +185,91 @@ public class Quiz extends Application {
        r.setOnAction(e -> button.setDisable(false));
      }
 
-     //defines what happens when 
+     //defines what happens when button pressed
     
      button.setOnAction(e -> 
      {
        for(RadioButton r2: this.toggles) {
            if(r2.isSelected() ) {
-          if (this.correctToggles.contains(r2)) {
-             correct++;
-             popup.setLabel("Answer was correct!");
-             popup.show(primaryStage);
-             break;
-           } else {
-             popup.setLabel("Answer was incorrect!");
-             popup.show(primaryStage);
+             //check if button pressed is correct answer
+             if (this.correctToggles.contains(r2)) {
+               //if correct, increment correct variable
+               correct++;
+               //tell user they got it correct
+               popup.setLabel("Answer was correct!");
+               popup.show(primaryStage);
+               break;
+             } else {
+               //tell user if they got answer incorrect
+               popup.setLabel("Answer was incorrect!");
+               popup.show(primaryStage);
+             }
            }
          }
-       }
-       if(count < max) {
-         Quiz next = new Quiz(sceneMain);
-         next.start(primaryStage);
-       }
-       else {
-         Results result = new Results(this.questions,sceneMain,count,correct);
-         result.start(primaryStage);
-       };
-     });
+         //check if user has gone through all questions
+         if(count < max) {
+           //go to next question
+           Quiz next = new Quiz(sceneMain);
+           next.start(primaryStage);
+         }
+         else {
+           //if user is done, go to results page
+           Results result = new Results(this.questions,sceneMain,count,correct);
+           result.start(primaryStage);
+         };
+       });
+     
+     //holds answer toggles for question
      VBox layout2 = new VBox(20);
      for(RadioButton r3: this.toggles) {
        layout2.getChildren().add(r3);
      }
+     //add button to layout2
      layout2.getChildren().add(button);
+     //set bottom pane of root
      root.setBottom(layout2);
      root.setMargin(layout2, new Insets(0,0,0,432));
    }
    
+   /**
+    * This method builds the center layout which holds the question text
+    * @param primaryStage is the stage of the program
+    */
    private void buildCenter(Stage primaryStage) {
-   //label for question text
+     //label for question text
      Label labelQuestion = new Label(this.currentQuestion.getQuestion());
+     //wrap text
      labelQuestion.setWrapText(true);
+     //put in Vertical Box
      VBox layout= new VBox(5);
      layout.getChildren().add(labelQuestion);
-     
+     //center the layout
      layout.setAlignment(Pos.CENTER);
-     
-     
-     //put question in center, image on top
      root.setCenter(layout);
    }
 
-@Override
-public void start(Stage primaryStage) {
+   /**
+    * This method builds the stage and displays it
+    */
+   @Override
+   public void start(Stage primaryStage) {
+     //Set title to tell user which question they are on
+     primaryStage.setTitle("Question "+count+" out of "+this.max);
   
-  primaryStage.setTitle("Question "+count+" out of "+this.max);
-  
-  this.setToggle();
+     //Create button toggles
+     this.setToggle();
    
-  this.buildTop(primaryStage);
-  this.buildBottom(primaryStage);
-  this.buildCenter(primaryStage);
+     //Build top, bottom, and center panes of the root
+     this.buildTop(primaryStage);
+     this.buildBottom(primaryStage);
+     this.buildCenter(primaryStage);
   
-  root.setPadding(new Insets(30));
+     root.setPadding(new Insets(30));
  
-  Scene scene1= new Scene(root, 1400, 864);
-  scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-  primaryStage.setScene(scene1);
-  primaryStage.show();
-  }
-
-  
-
-    
+     //Create the scene
+     Scene scene1= new Scene(root, 1400, 864);
+     scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+     primaryStage.setScene(scene1);
+     primaryStage.show();
+   }  
 }
