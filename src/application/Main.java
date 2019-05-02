@@ -299,7 +299,7 @@ public class Main extends Application {
       }
       
       for (int i = 0; i < newTopics.size(); i++) {
-        questions.add(loadFileScene.getQuestions().get(i));
+
         // add a topic to list if it is not in the list
         if (!topics.contains(newTopics.get(i))) {
           topics.add(newTopics.get(i));
@@ -318,7 +318,7 @@ public class Main extends Application {
       }
       
       for (int i = 0; i < newTopics.size(); i++) {
-        questions.add(loadFileScene.getQuestions().get(i));
+
         // add a topic to list if it is not in the list
         if (!topics.contains(newTopics.get(i))) {
           topics.add(newTopics.get(i));
