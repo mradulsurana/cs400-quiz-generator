@@ -1,3 +1,23 @@
+//////////////////////////////// HEADER COMMENT //////////////////////////////
+//
+// Title: cs400-quiz-generator
+// Course: (CS 400 section 001, Spring, 2019)
+// Due: May 2nd by 10:00pm
+//
+// Author: (Alfred Holmbeck, Mradul Surana, Allen Chang, Michael Lyrek, Jordan Ingbretson)
+// Lecturer's Name: (Prof. KUEMMEL)
+//
+///////////////////////////// CREDIT OUTSIDE HELP /////////////////////////////
+//
+// Persons: (none)
+// Online Sources: (none)
+//
+////////////////////////// COMMENTS and|or KNOWN BUGS /////////////////////////
+//
+// (none)
+//
+///////////////////////////////////////////////////////////////////////////////
+
 package application;
 
 import java.io.File;
@@ -27,7 +47,16 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
 
+/**
+ * This creates a new question and a new topic if that is required.  Adds each element created into 
+ * a question, including an image if an image file is included.  Users can create a new topic or 
+ * add the question into an existing topic
+ * 
+ * @author Alfred Holmbeck, Mradul Surana, Allen Chang, Michael Lyrek, Jordan Ingbretson
+ *
+ */
 public class SceneAddQuestion extends Application implements Builder {
+	//Fields that connect this class to its parent
 	private Main mainClass;
 	private Scene scene1;
 	private ObservableList<String> topics;
@@ -35,21 +64,22 @@ public class SceneAddQuestion extends Application implements Builder {
 	private ObservableList<String> newTopics = FXCollections.observableArrayList();
 	ArrayList<String> correctAnswers = new ArrayList<String>();
 
+	// fields to be added to the scene of the page
 	private BorderPane root = new BorderPane();
-	Label text = new Label("Text");
+	Label text = new Label("Text"); // labels
 	Label topic = new Label("Topic");
 	Label addTopic = new Label("If question is being added to new topic");
 	Label image = new Label("Image");
 	Label choice = new Label("Options");
 	Label correct = new Label("Correct");
 
-	RadioButton choice1 = new RadioButton("A");
+	RadioButton choice1 = new RadioButton("A"); // radio buttons
 	RadioButton choice2 = new RadioButton("B");
 	RadioButton choice3 = new RadioButton("C");
 	RadioButton choice4 = new RadioButton("D");
 	RadioButton choice5 = new RadioButton("E");
 
-	TextField textField = new TextField();
+	TextField textField = new TextField(); // text fields
 	TextField imageFile = new TextField();
 	TextField topicField = new TextField();
 	TextField choiceOne = new TextField();
@@ -58,13 +88,13 @@ public class SceneAddQuestion extends Application implements Builder {
 	TextField choiceFour = new TextField();
 	TextField choiceFive = new TextField();
 
-	Button add = new Button("Add");
+	Button add = new Button("Add"); // buttons
 	Button back = new Button("Back");
 	Button loadImageFile = new Button("Load Image");
 
 	ComboBox<String> topicComboBox;
 
-	GridPane grid = new GridPane();
+	GridPane grid = new GridPane(); // to be put on the root border pane
 	GridPane grid2 = new GridPane();
 
 	HBox bottomButtons = new HBox(2);
@@ -72,30 +102,41 @@ public class SceneAddQuestion extends Application implements Builder {
 	// needs to take in parameter for topic list
 	public SceneAddQuestion(Main main, ObservableList<String> allTopics) {
 		mainClass = main;
-		topics = allTopics;
+		topics = allTopics; // gets topic list from parent
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * driver method
+	 * @see javafx.application.Application#start(javafx.stage.Stage)
+	 */
 	@Override
 	public void start(Stage primaryStage) {
 
-		primaryStage.setTitle("Add Question");
-
+		primaryStage.setTitle("Add Question"); 
+		
+		// combo box to hold list of topics
 		topicComboBox = new ComboBox<String>(topics);
-
+		
+		// calls setup method to create each element
 		setup();
 
+		// each method builds part of the border pane
 		buildCenter();
 		buildTop();
 		buildBottom();
-
+		
+		// event handler for load image button
 		loadImageFile.setOnAction(ee -> {
-			loadImage();
+			loadImage(); // calls a method to load the image file into the image text field
 		});
 
+		// event handler for add button
 		add.setOnAction(eee -> {
 			try {
-				CustomPopup popup = new CustomPopup();
+				CustomPopup popup = new CustomPopup(); // popup for empty fields
 
+				
 				File file = new File(imageFile.getText().toString()); // converts the path of the image to a file
 				URL imageURL = file.toURI().toURL();
 				Image qImage = new Image(imageURL.toString()); // converts the image url to an Image in fx
@@ -103,15 +144,17 @@ public class SceneAddQuestion extends Application implements Builder {
 
 				String topicChosen;
 				boolean isNewTopic = false;
-				if (topicField.getText().equals(""))
-					topicChosen = topicComboBox.getValue();
+				if (topicField.getText().equals("")) // checks if topic field is empty
+					topicChosen = topicComboBox.getValue(); // gets value chosen from combo box
 				else {
-					topicChosen = topicField.getText();
-					isNewTopic = true;
+					topicChosen = topicField.getText(); // gets topic from text field
+					isNewTopic = true; // boolean value true if there is a new topic
 				}
-
+				
+				// string to hold question
 				String questionText = textField.getText();
 
+				// adds each answer to an array list
 				ArrayList<String> answers = new ArrayList<String>();
 				if (!choiceOne.getText().equals(""))
 					answers.add(choiceOne.getText());
@@ -124,19 +167,20 @@ public class SceneAddQuestion extends Application implements Builder {
 				if (!choiceFive.getText().equals(""))
 					answers.add(choiceFive.getText());
 
+				// checks how many answer fields arent null
 				boolean answersEmpty = true;
 				int j = 0;
-				for (int i = 0; i < answers.size(); ++i) {
-					if (!answers.get(i).equals("")) {
+				for (int i = 0; i < answers.size(); ++i) 
+					if (!answers.get(i).equals("")) 
 						j++;
-					}
-				}
-
-				if (j >= 2)
+					
+				if (j >= 2) // checks there are at least two non null answers
 					answersEmpty = false;
 
 				boolean bad = false;
-
+				// checks each radio button and if it is checked the corresponding answer is added 
+				// to an array list
+				// if corresponding answer is null, a boolean is set to true to make a popup
 				if (choice1.isSelected())
 					if (!choiceOne.getText().equals(""))
 						correctAnswers.add(choiceOne.getText());
@@ -168,25 +212,38 @@ public class SceneAddQuestion extends Application implements Builder {
 						bad = true;
 					}
 
+				// checks if there is at least one correct answer and that each 
+				//correct answer has a non null answer
 				if (correctAnswers.isEmpty() || bad) {
 					popup.setLabel("Please select correct answers that have an answer given");
 					popup.show(primaryStage);
 				} else if (!isNewTopic && (String) topicComboBox.getValue() == null) {
+					// checks if there is a topic or new topic
+					// creates popup if there is none
 					popup.setLabel("Please pick a topic or enter new topic");
 					popup.show(primaryStage);
 				} else if ((String) topicComboBox.getValue() != null && isNewTopic) {
+					// checks that only one topic is chosen between the text field and combo box
+					// creates popup if so
 					popup.setLabel("Please only pick a topic OR enter new topic");
 					popup.show(primaryStage);
 				} else if (questionText.equals("")) {
+					// checks that there is a question in the text box
+					// creates popup if there is none
 					popup.setLabel("Please enter text for a question");
 					popup.show(primaryStage);
 				} else if (answersEmpty) {
+					// checks that there are at least two answers non null 
+					// creates popup if not
 					popup.setLabel("Please enter at least two answers");
 					popup.show(primaryStage);
 				} else if (topics.contains(topicChosen) && isNewTopic) {
+					// checks that the new topic being inout doesnt exsist
+					// creates popup if so
 					popup.setLabel("Topic already exsists, please select it from the drop down box");
 					popup.show(primaryStage);
 				} else {
+					// if all fields are filled out properly new topic is added to topic lists
 					if (isNewTopic) {
 						newTopics.add(topicChosen);
 						topics.add(topicChosen);
@@ -194,6 +251,7 @@ public class SceneAddQuestion extends Application implements Builder {
 						Collections.sort(newTopics);
 					}
 
+					// question is created
 					Question newQuestion = new Question(questionText);
 					
 					for (int k = 0; k < correctAnswers.size(); ++k)
@@ -209,11 +267,13 @@ public class SceneAddQuestion extends Application implements Builder {
 
 					allQuestions.add(newQuestion);
 					
+					// if question was proplerly added to list, a success popup is displayed
 					if (allQuestions.contains(newQuestion)) {
 						popup.setLabel("Question was added, press back to return home, or add a new question");
 						popup.show(primaryStage);
 					}
 
+					// clears all text fields after question is created
 					clearFields();
 
 				}
@@ -222,12 +282,15 @@ public class SceneAddQuestion extends Application implements Builder {
 				e1.printStackTrace();
 			}
 
+			// returns to same page
 			subStart(primaryStage);
 
 		});
 
+		// event handler for back button, returns to main screen
 		back.setOnAction(e -> mainClass.subStart(primaryStage));
 
+		// shows the whole stage
 		scene1 = new Scene(root, 1400, 864);
 		primaryStage.setScene(scene1);
 
@@ -236,6 +299,9 @@ public class SceneAddQuestion extends Application implements Builder {
 
 	}
 
+	/**
+	 * method to clear all text fields 
+	 */
 	private void clearFields() {
 		textField.setText("");
 		imageFile.setText("");
@@ -247,8 +313,14 @@ public class SceneAddQuestion extends Application implements Builder {
 		choiceFive.setText("");
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * method to build the top portion of the border pane
+	 * @see application.Builder#buildTop()
+	 */
 	@Override
 	public void buildTop() {
+		// textfields and labels are added to grid pane
 		grid.add(text, 0, 0, 1, 1);
 		grid.add(topic, 0, 1, 1, 1);
 		grid.add(image, 0, 2, 1, 1);
@@ -261,16 +333,24 @@ public class SceneAddQuestion extends Application implements Builder {
 		grid.add(topicField, 2, 1, 1, 1);
 		grid.add(loadImageFile, 2, 2, 1, 1);
 
+		// dimensions are set
 		grid.setVgap(30);
 		grid.setHgap(200);
 		grid.setAlignment(Pos.CENTER);
 
+		// grid pane is added to border pane
 		root.setTop(grid);
 
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * method to build center of border pane
+	 * @see application.Builder#buildCenter()
+	 */
 	@Override
 	public void buildCenter() {
+		// text fields and radio buttons are added to grid pane
 		grid2.add(choice, 0, 1, 1, 1);
 		grid2.add(choiceOne, 0, 2, 1, 1);
 		grid2.add(choiceTwo, 0, 3, 1, 1);
@@ -285,39 +365,63 @@ public class SceneAddQuestion extends Application implements Builder {
 		grid2.add(choice4, 1, 5, 1, 1);
 		grid2.add(choice5, 1, 6, 1, 1);
 
+		// dimesnions are set
 		grid2.setVgap(30);
 		grid2.setHgap(200);
 		grid2.setAlignment(Pos.CENTER);
 
+		// grid pane is added to center
 		root.setCenter(grid2);
 
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * build the bottom of the border pane
+	 * @see application.Builder#buildBottom()
+	 */
 	@Override
 	public void buildBottom() {
+		// buttons are added to an Hbox
 		bottomButtons.getChildren().addAll(back, add);
 		bottomButtons.setAlignment(Pos.CENTER);
 		bottomButtons.setSpacing(200);
 
+		// hbox is added to bottom 
 		root.setBottom(bottomButtons);
 
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * builds left of border pane
+	 * @see application.Builder#buildLeft()
+	 */
 	@Override
 	public void buildLeft() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * builds right of border pane
+	 * @see application.Builder#buildRight()
+	 */
 	@Override
 	public void buildRight() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * method sets up each elemnt of scene
+	 */
 	public void setup() {
+		// sets a width for each text field
 		choiceOne.setPrefWidth(800);
 
+		// sets prompt texts for each text field
 		textField.setPromptText("Enter Question Here");
 		imageFile.setPromptText("Enter Image File Here");
 		topicField.setPromptText("Enter new topic here");
@@ -327,8 +431,10 @@ public class SceneAddQuestion extends Application implements Builder {
 		choiceFour.setPromptText("Option Four");
 		choiceFive.setPromptText("Option Five");
 
+		// disables add button at start
 		add.setDisable(true);
 
+		// each radio button enables add button
 		choice1.setOnAction(e -> add.setDisable(false));
 		choice2.setOnAction(e -> add.setDisable(false));
 		choice3.setOnAction(e -> add.setDisable(false));
@@ -336,6 +442,9 @@ public class SceneAddQuestion extends Application implements Builder {
 		choice5.setOnAction(e -> add.setDisable(false));
 	}
 
+	/**
+	 * method to lead image file
+	 */
 	private void loadImage() {
 		Stage s = new Stage(); // stage for file explorer
 		FileChooser fileChooser = new FileChooser(); // to find file
@@ -348,14 +457,26 @@ public class SceneAddQuestion extends Application implements Builder {
 			imageFile.setText(selectedFile.getPath()); // get the path and display for user
 	}
 
+	/**
+	 * getter for new topics created
+	 * @return newTopics is a list of all new topics
+	 */
 	public ObservableList<String> getTopics() {
 		return newTopics;
 	}
 
+	/**
+	 * getter for all questions made
+	 * @return allQuestions is a list of the questions made
+	 */
 	public ArrayList<Question> getQuestions() {
 		return allQuestions;
 	}
 
+	/**
+	 * starts scene from within the scene
+	 * @param primaryStage is the stage showing the GUI
+	 */
 	public void subStart(Stage primaryStage) {
 		primaryStage.setScene(scene1);
 		primaryStage.show();
