@@ -172,12 +172,16 @@ public class SceneAddQuestion extends Application {
 				String questionText = textField.getText();
 
 				ArrayList<String> answers = new ArrayList<String>();
+				if (!choiceOne.getText().equals(""))
 				answers.add(choiceOne.getText());
+				if (!choiceTwo.getText().equals(""))
 				answers.add(choiceTwo.getText());
+				if (!choiceThree.getText().equals(""))
 				answers.add(choiceThree.getText());
+				if (!choiceFour.getText().equals(""))
 				answers.add(choiceFour.getText());
+				if (!choiceFive.getText().equals(""))
 				answers.add(choiceFive.getText());
-				ArrayList<String> correctAnswers = new ArrayList<String>();
 
 				boolean answersEmpty = true;
 				int j = 0;
@@ -189,6 +193,10 @@ public class SceneAddQuestion extends Application {
 
 				if (j >= 2)
 					answersEmpty = false;
+				
+				
+
+				ArrayList<String> correctAnswers = new ArrayList<String>();
 
 				boolean bad = false;
 
@@ -266,6 +274,16 @@ public class SceneAddQuestion extends Application {
 						popup.setLabel("Question was added, press back to return home, or add a new question");
 						popup.show(primaryStage);
 					}
+					
+					textField.setText("");
+					imageFile.setText("");
+					topicField.setText("");
+					choiceOne.setText("");
+					choiceTwo.setText("");
+					choiceThree.setText("");
+					choiceFour.setText("");
+					choiceFive.setText("");
+					
 				}
 
 			} catch (MalformedURLException e1) {
