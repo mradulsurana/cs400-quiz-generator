@@ -185,7 +185,8 @@ public class SceneLoadFile extends Application {
 
 		Label prompt = new Label("Please open and load a .json file"); // communicate with user
 		
-		Label pathName = new Label("    ** No File Openned Yet **    "); // file path of .json loaded
+		Label pathName = new Label("                                         ** No File Openned Yet **"); // file path of .json loaded
+		pathName.setMaxWidth(1000);
 		pathName.setId("labelPathName"); // css id
 		// shows when no file is openned yet
 		pathName.setBackground(new Background(new BackgroundFill(Color.GHOSTWHITE, CornerRadii.EMPTY, Insets.EMPTY)));
