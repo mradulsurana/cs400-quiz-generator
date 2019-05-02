@@ -33,7 +33,7 @@ import javafx.stage.Stage;
  * @author Allen, Michael, Jordan, Noah, Mradul
  *
  */
-public class Quiz extends Application {
+public class Quiz extends Application implements Builder {
   //the arraylist of Questions that will be asked to the user
   private static ArrayList<Question> questions;
   //the buttons that the user can select to answer
@@ -142,7 +142,8 @@ public class Quiz extends Application {
     * put in scene
     * @param primaryStage is the Stage that quiz will show
     */
-   private void buildTop() {
+  @Override
+   public void buildTop() {
      
      
      //check if the image exists
@@ -172,7 +173,8 @@ public class Quiz extends Application {
     * be put in scene
     * @param primaryStage is stage of the Quiz
     */
-   private void buildBottom() {
+  @Override
+   public void buildBottom() {
      //button for going to next question
      Button button= new Button("Next");
      button.setDisable(true);
@@ -239,7 +241,8 @@ public class Quiz extends Application {
     * This method builds the center layout which holds the question text
     * @param primaryStage is the stage of the program
     */
-   private void buildCenter() {
+  @Override
+   public void buildCenter() {
      //label for question text
      Label labelQuestion = new Label(this.currentQuestion.getQuestion());
      //wrap text
@@ -256,7 +259,8 @@ public class Quiz extends Application {
     * Method for building left pane, since we don't have any info to display
     * it is currently unused
     */
-   private void buildLeft() {
+  @Override
+   public void buildLeft() {
      
    }
    
@@ -264,7 +268,8 @@ public class Quiz extends Application {
     * Method for building the right pane, since we don't have any info to display
     * it is currently unused
     */
-   private void buildRight() {
+  @Override
+   public void buildRight() {
      
    }
    /**
