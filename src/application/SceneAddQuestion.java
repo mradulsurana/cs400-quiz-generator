@@ -266,8 +266,10 @@ public class SceneAddQuestion extends Application implements Builder {
 					
 					newQuestion.setTopic(topicChosen);
 					
-					if (!imageFile.getText().equals(""))
+					if (!imageFile.getText().equals("")) {
 						newQuestion.setImage(imageView);
+						newQuestion.setImageName(imageFile.getText());
+					}
 
 					allQuestions.add(newQuestion);
 					
