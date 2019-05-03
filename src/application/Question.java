@@ -31,6 +31,8 @@ public class Question {
   private String topic;
   //question text
   private String question;
+  //name of image
+  private String imageName;
   //question image
   private ImageView image;
   //correct answers to the question
@@ -128,5 +130,13 @@ public class Question {
    */
   public ImageView getImage() {
     return this.image;
+  }
+  
+  public String getImageName() {
+	  return this.imageName;
+  }
+  
+  public void setImageName(String imageName) {
+	  this.imageName = imageName;
   }
 }

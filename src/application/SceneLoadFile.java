@@ -149,6 +149,7 @@ public class SceneLoadFile extends Application implements Builder {
 				Image qImage = new Image(imageURL.toString()); // converts the image url to an Image in fx
 				ImageView image = new ImageView(qImage); // converts image so that it can be displayed in fx
 				question.setImage(image); // connects the image to the question
+				question.setImageName(imageName); // sets the name of the image in the question
 			}
 			
 			JSONArray choices = (JSONArray) jQuestion.get("choiceArray"); // choices to parse
