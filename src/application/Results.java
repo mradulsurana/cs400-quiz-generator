@@ -4,7 +4,6 @@ package application;
 import java.util.ArrayList;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -34,7 +33,7 @@ public class Results extends Application{
   }
   
   public double getPercent() {
-    return (double)correct/total;
+	  return (((double)correct)*100) / (((double)total)*100) * 100;
   }
   
   public int getCorrect() {
@@ -64,7 +63,11 @@ public class Results extends Application{
     //Labels for how well the user did on quiz
     Label correct = new Label("Questions correct: "+this.getCorrect());
     Label incorrect = new Label("Questions incorrect: "+this.getIncorrect());
-    Label percent = new Label("Percent: "+(int)(this.getPercent())*100+"%");
+    Label percent = new Label("Percent: "+(int)(this.getPercent())+"%");
+    
+    correct.setAlignment(Pos.CENTER);
+    incorrect.setAlignment(Pos.CENTER);
+    percent.setAlignment(Pos.CENTER);
     
     //Button for making new quiz
     Button makeNew = new Button("Make new quiz");
@@ -75,26 +78,9 @@ public class Results extends Application{
     //Button for exiting
     Button exit = new Button("Exit");
     exit.setOnAction(e -> {
-    	
-//    	CustomPopup pop = new CustomPopup();
-//		pop.setLabel("Goodbye, have a great day!");
-//		pop.show(primaryStage);
-		
-    	ExitPopup pop = new ExitPopup(primaryStage);
+    	ExitPopup pop = new ExitPopup(this.questions);
+    	pop.start(primaryStage);
     	pop.show(primaryStage);
-    	
-    	
-    	
-//    	try
-//    	{
-//    	    Thread.sleep(3000);
-//    	}
-//    	catch(InterruptedException ex)
-//    	{
-//    	    Thread.currentThread().interrupt();
-//    	}
-//    	
-//    	Platform.exit();
     });
     
     //putting labels in the vertical box

@@ -1,7 +1,9 @@
 package application;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import java.util.ArrayList;
+import java.util.Optional;
+import javafx.stage.Stage;
+import javafx.scene.control.ButtonType;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -10,147 +12,178 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javafx.application.Platform;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
-import javafx.stage.Stage;
-import javafx.stage.FileChooser.ExtensionFilter;
 
 public class ExitPopup {
-  private Popup popup = new Popup();
-  private Label popupLabel = new Label();
+  private Popup popup;
+  private ArrayList<Question> questions;
   
-  public ExitPopup(Stage primaryStage) {
-    setUp(primaryStage);
+  public ExitPopup(ArrayList<Question> questions) {
+	  this.popup = new Popup();
+	  this.questions = questions;
   }
 
   public static void main(String[] args) {
  
   }
   
+  //Shows the ExitPopup alert
   public void show(Stage primaryStage) {
     popup.show(primaryStage);
   }
   
-  public void setLabel(String label) {
-    
+  //Takes the questions passed in, and creates a JSONArray from the question info
+  private JSONObject createJSON(ArrayList<Question> questions) {
+	JSONObject resultsObj = new JSONObject();
+	
+	JSONArray questionArray = new JSONArray();
+	
+	//Loops through the questions to create a JSONObject for each question
+	for (int i=0; i < questions.size(); i++) {
+		Question question = questions.get(i);
+		
+		JSONObject questionData = new JSONObject();
+		
+		questionData.put("meta-data","unused");
+		questionData.put("questionText",question.getQuestion());
+		questionData.put("topic",question.getTopic());
+		
+		if (question.getImage() == null) {
+			questionData.put("image","none");
+		} else {
+			questionData.put("image",question.getImage());
+		}
+		
+		JSONArray choicesArray = new JSONArray();
+		ArrayList<String> choices = question.getAllAns();
+		ArrayList<String> correctChoices = question.getCorrectAns();
+		for (int j=0; j < choices.size(); j++) {
+			JSONObject choice = new JSONObject();
+			
+			//Figures out if the current choice is one of the correct choices
+			boolean isCorrect = false;
+			for (int k=0; k < correctChoices.size(); k++) {
+				if (choices.get(j) == correctChoices.get(k)) {
+					isCorrect = true;
+				}
+			}
+			if (isCorrect) {
+				choice.put("isCorrect","T");
+			} else {
+				choice.put("isCorrect","F");
+			}
+			
+			choice.put("choice",choices.get(j));
+			
+			choicesArray.add(choice);
+		}
+		
+		questionData.put("choiceArray",choicesArray);
+		questionArray.add(questionData);
+	}
+	
+	resultsObj.put("questionArray", questionArray);
+	
+	return resultsObj;
   }
   
-  public void setUp(Stage primaryStage) {
+  public void start(Stage primaryStage) {
+    Alert exitPopup = new Alert(AlertType.CONFIRMATION);
+    exitPopup.setTitle("Quiz Generator");
+    exitPopup.setHeaderText("Do you want to save your results?");
     
-    VBox vbox = new VBox(); // create vbox to hold
-    vbox.setId("popup");
+    //Creates the buttons that goes on the alert
+    ButtonType btnClose = new ButtonType("Exit without saving");
+    ButtonType btnSave = new ButtonType("Save and exit");
+    ButtonType btnCancel = new ButtonType("Cancel");
 
-    Button btnClose = new Button("Exit without saving");
-    Button btnSave = new Button("Save");
+    //Remove the default ButtonTypes
+    exitPopup.getButtonTypes().clear();  
     
-    popupLabel.setMinWidth(120);
-    popupLabel.setMinHeight(200);
+    //Add the new custom buttons
+    exitPopup.getButtonTypes().addAll(btnSave, btnClose, btnCancel);
     
-    popupLabel.setText("Do you want to save your results?");
-    
-    // popup.getContent().add(btnClose);
-    popup.getContent().add(vbox);
-    vbox.getChildren().add(popupLabel);
-    vbox.getChildren().add(btnClose);
-    btnClose.setOnAction(f -> {
-    	//popup.hide();
+    //Brings up the alert that the player gets when they press "Exit", with different options
+    Optional<ButtonType> option = exitPopup.showAndWait();
+    if (option.get() == null) {
     	
-    	CustomPopup pop = new CustomPopup();
-		pop.setLabel("Goodbye, have a great day!");
-		pop.show(primaryStage);
+    /* 
+     * The event that happens if the player presses "Exit without Saving"
+     * Gives the player a goodbye message and then closes Quiz Generator
+    */
+    } else if (option.get() == btnClose) {
+    	Alert popup = new Alert(AlertType.INFORMATION);
+		popup.setHeaderText("Goodbye, have a great day!");
 		
-		//some kinda wait here
-    	//Platform.exit();
-  	});
-    
-    vbox.getChildren().add(btnSave); // the event for the save button
-    btnSave.setOnAction(f -> {
+		Optional<ButtonType> result = popup.showAndWait();
+		if(!result.isPresent()) {
+			//Platform.exit(); //alert is exited via the x, no button was pressed
+		} else if(result.get() == ButtonType.OK) {
+			Platform.exit();
+    	} else if(result.get() == ButtonType.CANCEL) {
+		    //cancel button is pressed (unused)
+    	}
+    	
+	/* 
+	 * The event that happens if the player presses "Save and Exit"
+	 * Creates a JSON file from the quiz questions and prompts the user to save the files somewhere.
+	 * Closes Quiz Generator after saving
+	 */
+    } else if (option.get() == btnSave) {
     	Stage s = new Stage(); // stage for file explorer
+    	
+    	//Sets up the file explorer for the user to save the JSON file
     	FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Results");
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         fileChooser.setInitialFileName("quiz_results.json");
-        FileChooser.ExtensionFilter jsonExtensionFilter =
-                new FileChooser.ExtensionFilter("JSON Format (.json)", "*.json");
+        FileChooser.ExtensionFilter jsonExtensionFilter = 
+        		new FileChooser.ExtensionFilter("JSON Format (.json)", "*.json");
         fileChooser.getExtensionFilters().add(jsonExtensionFilter);
         fileChooser.setSelectedExtensionFilter(jsonExtensionFilter);
         File userFile = fileChooser.showSaveDialog(s);
         
-//        //First
-//        JSONObject resultsDetails = new JSONObject();
-//        resultsDetails.put("result1", "0");
-//        resultsDetails.put("result2", "0");
-//        resultsDetails.put("result3", "0");
-//         
-//        JSONObject resultsObject = new JSONObject();
-//        resultsObject.put("result 1", resultsDetails);
-//         
-//        //Second
-//        JSONObject resultsDetails2 = new JSONObject();
-//        resultsDetails2.put("result1", "0");
-//        resultsDetails2.put("result2", "0");
-//        resultsDetails2.put("result3", "0");
-//         
-//        JSONObject resultsObject2 = new JSONObject();
-//        resultsObject2.put("result 2", resultsDetails2);
-//         
-//        //Add results to list
-//        JSONArray resultsList = new JSONArray();
-//        resultsList.add(resultsObject);
-//        resultsList.add(resultsObject2);
-         
         if (userFile != null) {
-	        //Write JSON file
-	        try {// (FileWriter file = new FileWriter("employees.json")) {
-	            //file.write(resultsList.toJSONString());
-	            //file.flush();
-	 
-	            CustomPopup pop = new CustomPopup();
-				pop.setLabel("Successfully saved to " + userFile.getPath() + "! Closing...");
-				pop.show(primaryStage);
+	        try {
+				//Create the JSON object
+				JSONObject resultsList = createJSON(this.questions);
 				
-				//some kinda wait here
-		    	//Platform.exit();
+				//Write the JSON object to the JSON file
+				FileWriter file = new FileWriter(userFile);
+	            file.write(resultsList.toJSONString());
+				file.flush();
+				
+				/*
+				 * Bring up an alert that notifies their file successfully saved
+				 * and then lets them exit the program by clicking OK.
+				 */
+				Alert popup = new Alert(AlertType.INFORMATION);
+				popup.setHeaderText("Successfully saved to " + userFile.getPath() + "!");
+				popup.setContentText("Click OK to finish.");
+				Optional<ButtonType> result = popup.showAndWait();
+				if(!result.isPresent()) {
+					//Platform.exit(); //alert is exited via the x, no button was pressed
+				} else if(result.get() == ButtonType.OK) {
+					Platform.exit();
+	        	} else if(result.get() == ButtonType.CANCEL) {
+				    //cancel button is pressed (unused)
+	        	}
 	            
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
         }
-        
-        
-        
-//        if (userFile != null) {
-//            try {
-//            	BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-//    			JSONObject data = Dungeon.writeToJSON(this.dungeon);
-//    			JSON.write(writer, data);
-//    			writer.flush();
-//    			writer.close();
-
-//            	CustomPopup pop = new CustomPopup();
-//    			pop.setLabel("Successfully saved to " + userFile.getPath() + "! Closing...");
-//    			pop.show(primaryStage);
-//    			
-//    			//some kinda wait here
-//    	    	//Platform.exit();
-//            	
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
     	
-  	});
-
-    popupLabel.setStyle("-fx-padding: 0 20 0 20;");
-    vbox.setAlignment(Pos.CENTER);
-    VBox.setMargin(btnClose, new Insets(30));
-    VBox.setMargin(btnSave, new Insets(10));
-    
-    popupLabel.setId("popupLabel");
-    
-    
+    /* 
+     * The event that happens if the player presses "Cancel"
+     * Closes the alert
+     */
+    } else if (option.get() == btnCancel) {
+    	System.out.println(""); //Print needs to be here, else cancel button doesn't work
+    }
+ 
   }
 }
