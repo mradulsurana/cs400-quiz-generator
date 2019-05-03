@@ -54,7 +54,7 @@ public class ExitPopup {
 		if (question.getImage() == null) {
 			questionData.put("image","none");
 		} else {
-			questionData.put("image",question.getImage());
+			questionData.put("image",question.getImageName());
 		}
 		
 		JSONArray choicesArray = new JSONArray();
