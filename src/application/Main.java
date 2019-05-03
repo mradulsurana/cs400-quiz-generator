@@ -116,6 +116,8 @@ public class Main extends Application implements Builder {
 
     Collections.sort(topics); // sort topics alphabetically since new topics may have been added
 
+    primaryStage.setTitle("Quiz Generator"); // reset title of the program
+
     lblTotalQuestions.setText("Number of Questions in Question Database: " + questions.size());
 
     primaryStage.setScene(scene);
@@ -264,8 +266,9 @@ public class Main extends Application implements Builder {
       // checks if the user typed in the number of questions and if the user selected topics
 
       try {
-        // get number of questions from the text field
-        int numQuestions = Integer.parseInt(txtNumQuestions.getText());
+        // get number of questions from the text field and remove all commas in number
+        String txtQuestions = txtNumQuestions.getText().replaceAll(",", "");
+        int numQuestions = Integer.parseInt(txtQuestions);
 
         // check that the textfield was not empty, that there are topics, and the number of
         // questions is a positive number
@@ -287,13 +290,14 @@ public class Main extends Application implements Builder {
 
         } else { // prompt user to fill out fields correctly
           popup.setLabel(
-              "Please enter a positive number of questions and choose at least one topic");
+              "Please enter an integer between 1 and 2,147,483,647 for the number of questions and choose at least one topic");
           popup.show(primaryStage);
         }
 
       } catch (NumberFormatException f) {
         // prompt user to fill out fields correctly if they enter a non integer
-        popup.setLabel("Please enter a positive number for the number of questions");
+        popup.setLabel(
+            "Please enter an integer between 1 and 2,147,483,647 for the number of questions");
         popup.show(primaryStage);
       }
 
