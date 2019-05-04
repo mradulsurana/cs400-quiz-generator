@@ -25,7 +25,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-
+import java.util.HashSet;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,13 +36,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -216,6 +214,23 @@ public class SceneAddQuestion extends Application implements Builder {
 						bad = true;
 					}
 
+				
+				// create ArrayList to hold all choices to later check if there is a duplicate 
+				// option entered
+				ArrayList<String> allChoices = new ArrayList<String>();
+				allChoices.add(choiceOne.getText());
+				allChoices.add(choiceTwo.getText());
+				allChoices.add(choiceThree.getText());
+				allChoices.add(choiceFour.getText());
+				allChoices.add(choiceFive.getText());
+				
+				// remove blank options from allChoices
+				for (int i = 0; i < allChoices.size(); i++) {
+				  if (allChoices.get(i).equals("")) {
+				    allChoices.remove(i);
+				  }
+				}
+
 				// checks if there is at least one correct answer and that each 
 				//correct answer has a non null answer
 				if (correctAnswers.isEmpty() || bad) {
@@ -244,10 +259,15 @@ public class SceneAddQuestion extends Application implements Builder {
 					popup.setLabel("Please enter at least two answers");
 					popup.show(primaryStage);
 				} else if (topics.contains(topicChosen) && isNewTopic) {
-					// checks that the new topic being inout doesnt exsist
+					// checks that the new topic being inout doesn't exist
 					// creates popup if so
 					popup.setLabel("Topic already exsists, please select it from the drop down box");
 					popup.show(primaryStage);
+				} else if (duplicateExists(allChoices)) {
+				  
+				    // if a duplicate option exists give the user an error message
+				    popup.setLabel("You cannot enter the same answer choice more than once");
+                    popup.show(primaryStage);
 				} else {
 					// if all fields are filled out properly new topic is added to topic lists
 					if (isNewTopic) {
@@ -496,6 +516,14 @@ public class SceneAddQuestion extends Application implements Builder {
 		primaryStage.setScene(scene1);
 		primaryStage.show();
 
+	}
+	
+	/**
+     * checks if a list contains a duplicate
+     * @param primaryStage is the stage showing the GUI
+     */
+	public static <T> boolean duplicateExists(ArrayList<T> list){
+	    return !list.stream().allMatch(new HashSet<>()::add);
 	}
 
 }

@@ -1,3 +1,23 @@
+//////////////////////////////// HEADER COMMENT //////////////////////////////
+//
+// Title: cs400-quiz-generator
+// Course: (CS 400 section 001, Spring, 2019)
+// Due: May 2nd by 10:00pm
+//
+// Author: (Alfred Holmbeck, Mradul Surana, Allen Chang, Michael Lyrek, Jordan Ingbretson)
+// Lecturer's Name: (Prof. KUEMMEL)
+//
+///////////////////////////// CREDIT OUTSIDE HELP /////////////////////////////
+//
+// Persons: (none)
+// Online Sources: (none)
+//
+////////////////////////// COMMENTS and|or KNOWN BUGS /////////////////////////
+//
+// (none)
+//
+///////////////////////////////////////////////////////////////////////////////
+
 package application;
 
 import javafx.application.Application;
@@ -34,6 +54,9 @@ import javafx.stage.Stage;
  *
  */
 public class Quiz extends Application implements Builder {
+  
+  // the entire database of questions
+  private static ArrayList<Question> allQuestions;
   //the arraylist of Questions that will be asked to the user
   private static ArrayList<Question> questions;
   //the buttons that the user can select to answer
@@ -66,7 +89,7 @@ public class Quiz extends Application implements Builder {
     //iterate count since this is a new question in the quiz
     count++;
     //set the current question
-    this.currentQuestion = this.questions.get(count-1);
+    this.currentQuestion = Quiz.questions.get(count-1);
     this.i1 = this.currentQuestion.getImage();
   }
   
@@ -79,37 +102,40 @@ public class Quiz extends Application implements Builder {
    */
   public Quiz(Main sceneMain, ArrayList<Question> questions, int max, ObservableList<String> topics) {
     //initially set the list of questions to be all the questions
-    this.questions = new ArrayList<Question>();
+    Quiz.questions = new ArrayList<Question>();
+    
+    // holds the entire database of questions
+    allQuestions = new ArrayList<Question>(questions);
     
     for(Question q: questions) {
       if(topics.contains(q.getTopic())) {
-        this.questions.add(q);
+        Quiz.questions.add(q);
       }
     }
     //randomize the order of questions
-    Collections.shuffle(this.questions);
+    Collections.shuffle(Quiz.questions);
     
-    if(this.questions.size() <= max) {
+    if(Quiz.questions.size() <= max) {
      
-      this.max = this.questions.size();
+      Quiz.max = Quiz.questions.size();
       
     } else {
       
-      for(int i=0;i<this.questions.size()-max;i++) {
-        this.questions.remove(0);
+      for(int i=0;i<Quiz.questions.size()-max;i++) {
+        Quiz.questions.remove(0);
       }
       //this.questions = (ArrayList<Question>)this.questions.subList(0,max);
-      this.max = max;
+      Quiz.max = max;
     }
 
     
-    this.count = 1;
-    this.correct = 0;
+    Quiz.count = 1;
+    Quiz.correct = 0;
     //set the current question
-    this.currentQuestion = this.questions.get(count-1);
+    this.currentQuestion = Quiz.questions.get(count-1);
     //set current question count and num correct
     this.i1 = this.currentQuestion.getImage();
-    this.sceneMain = sceneMain;
+    Quiz.sceneMain = sceneMain;
     
     
     
@@ -163,8 +189,8 @@ public class Quiz extends Application implements Builder {
        root.setTop(i1);
        
        //center the image and margins
-       root.setAlignment(i1, Pos.CENTER);
-       root.setMargin(i1, new Insets(50));
+       BorderPane.setAlignment(i1, Pos.CENTER);
+       BorderPane.setMargin(i1, new Insets(50));
      }
    }
    
@@ -179,7 +205,6 @@ public class Quiz extends Application implements Builder {
      Button button= new Button("Next");
      button.setDisable(true);
      CustomPopup popup = new CustomPopup();
-     boolean isCorrect = false;
 
      //toggle group so that only one button can be selected
      ToggleGroup question1= new ToggleGroup();
@@ -220,7 +245,7 @@ public class Quiz extends Application implements Builder {
          }
          else {
            //if user is done, go to results page
-           Results result = new Results(this.questions,sceneMain,count,correct);
+           Results result = new Results(Quiz.allQuestions,sceneMain,count,correct);
            result.start(primaryStage);
          };
        });
@@ -234,7 +259,7 @@ public class Quiz extends Application implements Builder {
      layout2.getChildren().add(button);
      //set bottom pane of root
      root.setBottom(layout2);
-     root.setMargin(layout2, new Insets(0,0,0,432));
+     BorderPane.setMargin(layout2, new Insets(0,0,0,432));
    }
    
    /**
@@ -279,7 +304,7 @@ public class Quiz extends Application implements Builder {
    public void start(Stage primaryStage) {
      this.primaryStage = primaryStage;
      //Set title to tell user which question they are on
-     primaryStage.setTitle("Question "+count+" out of "+this.max);
+     primaryStage.setTitle("Question "+count+" out of "+Quiz.max);
   
      //Create button toggles
      this.setToggle();
