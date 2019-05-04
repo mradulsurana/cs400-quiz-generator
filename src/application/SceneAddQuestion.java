@@ -267,6 +267,7 @@ public class SceneAddQuestion extends Application implements Builder {
 						newQuestion.setAllAns(answers.get(l));
 					
 					newQuestion.setTopic(topicChosen);
+					newQuestion.setMetaData("unused");
 					
 					if (!imageFile.getText().equals("")) {
 						newQuestion.setImage(imageView);
