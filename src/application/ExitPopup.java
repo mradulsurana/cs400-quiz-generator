@@ -45,6 +45,8 @@ public class ExitPopup {
 	for (int i=0; i < questions.size(); i++) {
 		Question question = questions.get(i);
 		
+		System.out.println(question.getCorrectAns().get(0));
+		
 		JSONObject questionData = new JSONObject();
 		
 		questionData.put("meta-data",question.getMetaData());
@@ -66,7 +68,7 @@ public class ExitPopup {
 			//Figures out if the current choice is one of the correct choices
 			boolean isCorrect = false;
 			for (int k=0; k < correctChoices.size(); k++) {
-				if (choices.get(j) == correctChoices.get(k)) {
+				if (choices.get(j).equals(correctChoices.get(k))) {
 					isCorrect = true;
 				}
 			}
