@@ -45,8 +45,6 @@ public class ExitPopup {
 	for (int i=0; i < questions.size(); i++) {
 		Question question = questions.get(i);
 		
-		System.out.println(question.getCorrectAns().get(0));
-		
 		JSONObject questionData = new JSONObject();
 		
 		questionData.put("meta-data",question.getMetaData());
