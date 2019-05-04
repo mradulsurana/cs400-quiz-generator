@@ -91,7 +91,7 @@ public class SceneAddQuestion extends Application implements Builder {
 	Button add = new Button("Add"); // buttons
 	Button back = new Button("Back");
 	Button loadImageFile = new Button("Load Image");
-	Button resetBox = new Button("Reset Drop Down Box");
+	Button resetBox = new Button("Clear Topics Drop Down Box");
 
 	ComboBox<String> topicComboBox;
 
@@ -229,6 +229,8 @@ public class SceneAddQuestion extends Application implements Builder {
 				} else if ((String) topicComboBox.getValue() != null && isNewTopic) {
 					// checks that only one topic is chosen between the text field and combo box
 					// creates popup if so
+				    
+				    topicComboBox.setValue(null);
 					popup.setLabel("Please only pick a topic OR enter new topic");
 					popup.show(primaryStage);
 				} else if (questionText.equals("")) {
