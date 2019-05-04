@@ -162,7 +162,7 @@ public class ExitPopup {
 				 */
 				Alert popup = new Alert(AlertType.INFORMATION);
 				popup.setHeaderText("Successfully saved to " + userFile.getPath() + "!");
-				popup.setContentText("Click OK to finish.");
+				popup.setContentText("Click OK to finish. Goodbye!");
 				Optional<ButtonType> result = popup.showAndWait();
 				if(!result.isPresent()) {
 					//Platform.exit(); //alert is exited via the x, no button was pressed
