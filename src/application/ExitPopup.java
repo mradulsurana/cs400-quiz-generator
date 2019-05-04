@@ -47,7 +47,7 @@ public class ExitPopup {
 		
 		JSONObject questionData = new JSONObject();
 		
-		questionData.put("meta-data","unused");
+		questionData.put("meta-data",question.getMetaData());
 		questionData.put("questionText",question.getQuestion());
 		questionData.put("topic",question.getTopic());
 		
