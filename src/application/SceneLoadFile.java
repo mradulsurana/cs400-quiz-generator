@@ -140,6 +140,9 @@ public class SceneLoadFile extends Application implements Builder {
 			String topic = (String)jQuestion.get("topic");
 			question.setTopic(topic); // adds the question topic
 			
+			String metaData = (String)jQuestion.get("meta-data");
+			question.setMetaData(metaData);
+			
 			String imageName = (String)jQuestion.get("image"); // only try and add an image if there is an image to add
 			if(!imageName.equals("none")) {
 				Path sibling = Paths.get(filePath); // .json as path

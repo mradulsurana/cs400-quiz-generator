@@ -31,6 +31,8 @@ public class Question {
   private String topic;
   //question text
   private String question;
+  // meta data
+  private String metaData;
   //name of image
   private String imageName;
   //question image
@@ -50,6 +52,7 @@ public class Question {
     this.correctAns = new ArrayList<String>();
     this.allAns = new ArrayList<String>();
     this.image = null;
+    this.metaData = null;
   }
   
   /**
@@ -138,5 +141,13 @@ public class Question {
   
   public void setImageName(String imageName) {
 	  this.imageName = imageName;
+  }
+  
+  public String getMetaData() {
+	  return this.metaData;
+  }
+  
+  public void setMetaData(String metaData) {
+	  this.metaData = metaData;
   }
 }
